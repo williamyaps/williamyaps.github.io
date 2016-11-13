@@ -1,0 +1,65 @@
+ul.vbUL2m1i2 {
+  position: absolute;
+  visibility: hidden;
+}
+.vbUL2m1i2 {
+  position: absolute;
+  visibility: hidden;
+  display: block;
+  overflow: auto;
+  font-size: 1px;
+  padding: 0px;
+  margin: 0px;
+  border: 1px solid #1AC710;
+  background-color: #D1FCCF;
+}
+.vbUL2m1i2 table {
+  border-collapse: separate;
+  border-spacing: 0px;
+}
+.vbUL2m1i2 tr {
+  font-size: 1px;
+  cursor: pointer;
+  background-color: #D1FCCF;  
+}
+.vbUL2m1i2 tr.over {
+  background-color: #56CB38;
+}
+.vbUL2m1i2 td {
+  border: 1px solid #BAE7B8;
+  padding: 3px;
+  text-align: left;
+}
+.vbUL2m1i2 tr.over td {
+  border-color: #56CB38;
+}
+.vbUL2m1i2 td a {
+  font-family: Trebuchet MS;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: normal;
+  color: #000000;
+  text-decoration: none;
+}
+.vbUL2m1i2 tr.over a {
+  font-family: Trebuchet MS;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: normal;
+  color: #000000;
+  text-decoration: underline;
+}
+.vbUL2m1i2 tr.popup {
+  background-color: #56CB38;
+}
+.vbUL2m1i2 tr.popup td {
+  border-color: #56CB38;
+}
+.vbUL2m1i2 tr.popup a {
+  font-family: Trebuchet MS;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: normal;
+  color: #000000;
+  text-decoration: underline;
+}
