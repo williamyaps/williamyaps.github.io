@@ -1,0 +1,215 @@
+/*
+	William Yap Personal Biography
+
+	Media: screen
+	Author: William Yap
+*/
+
+body {
+	background-color: #c61f00;
+	padding:0;
+	margin:0;
+	color: #fff;
+	font-family: 'din-web', Arial;
+	overflow: hidden;
+}
+
+h2, p, a, h2 span {
+	padding: 0;
+	margin: 0;
+	position: absolute;
+	text-transform: uppercase;
+	line-height: 0.67em;
+	font-weight: 400;
+	text-decoration: none;
+	color: #fff;
+}
+
+
+img {
+	border: none;
+}
+
+p span {
+	display: block;
+	margin: 0;
+	padding: 0;
+	text-indent: -9999px;
+}
+
+#arrow1, #arrow2, #arrow3, #arrow4 {
+	position: absolute;
+	cursor: pointer;
+}
+
+#pathCanvas, #screen1, #screen2, #screen3, #screen4, #router, #electric, #illustration {
+	position: absolute;
+}
+
+/*
+	Header
+*/
+
+header {
+	position: fixed;
+	top: 50px;
+	width: 250px;
+	height: 85px;
+	z-index: 1;
+}
+
+header h1 a {
+	display: block;
+	overflow: hidden;
+	border: none;
+}
+
+/*
+	Screen 1
+*/
+#arrow1, #arrow1:hover .arrowImage {
+	right: 0;
+}
+
+	#arrow1 .arrowImage {
+		position: absolute;
+		width: 60px;
+		height: 40px;
+		right: 10px;
+		-webkit-transition: right 0.1s ease-in-out;
+		-moz-transition: right 0.1s ease-in-out;
+		-o-transition: right 0.1s ease-in-out;
+		-ms-transition: right 0.1s ease-in-out;
+	}
+
+	#arrow1 .arrowText {
+		position: absolute;
+		width: 90px;
+		height: 40px;
+	}
+
+/*
+	Screen 2
+*/
+#arrow2, #arrow2:hover .arrowImage {
+	bottom: 0;
+}
+
+	#arrow2 .arrowImage {
+		position: absolute;
+		width: 40px;
+		height: 60px;
+		bottom: 10px;
+		-webkit-transition: bottom 0.1s ease-in-out;
+		-moz-transition: bottom 0.1s ease-in-out;
+		-o-transition: bottom 0.1s ease-in-out;
+		-ms-transition: bottom 0.1s ease-in-out;
+	}
+
+	#arrow2 .arrowText {
+		position: absolute;
+		width: 40px;
+		height: 90px;
+	}
+
+/*
+	Screen 3
+*/
+
+#screen3 h2{
+	line-height: 1;
+}
+
+#arrow3, #arrow3:hover .arrowImage {
+	left: 0;
+}
+
+	#arrow3 .arrowImage {
+		position: absolute;
+		width: 60px;
+		height: 40px;
+		left: 10px;
+		-webkit-transition: left 0.1s ease-in-out;
+		-moz-transition: left 0.1s ease-in-out;
+		-o-transition: left 0.1s ease-in-out;
+		-ms-transition: left 0.1s ease-in-out;
+	}
+
+	#arrow3 .arrowText {
+		position: absolute;
+		width: 90px;
+		height: 40px;
+		left: 80px;
+	}
+
+/*
+	Screen 4
+*/
+
+#arrow4 {
+	position: absolute;
+	width: 40px;
+	height: 140px;
+	cursor: auto;
+}
+
+	#arrow4 .arrowImage {
+		position: absolute;
+		width: 40px;
+		height: 60px;
+		top: 10px;
+		-webkit-transition: top 0.1s ease-in-out;
+		-moz-transition: top 0.1s ease-in-out;
+		-o-transition: top 0.1s ease-in-out;
+		-ms-transition: top 0.1s ease-in-out;
+	}
+
+	#arrow4:hover .arrowImage {
+		top: 0;
+	}
+
+#contact {
+	position: absolute;
+}
+
+	#contact h2 {
+		line-height: 1;
+		display: block;
+	}
+
+	ul {
+		position: relative;
+		margin: 0;
+		padding: 0;
+		line-height: 1;
+		text-transform: uppercase;
+	}
+
+		li {
+			position: absolute;
+			list-style: none;
+			opacity: 0;
+			-webkit-transition: opacity 1s ease-in-out;
+			-moz-transition: opacity 1s ease-in-out;
+			-o-transition: opacity 1s ease-in-out;
+			-ms-transition: opacity 1s ease-in-out;
+		}
+
+			ul li a {
+				color: #e19d7f;
+			}
+
+/*
+	Fonts
+*/
+
+@font-face {
+	font-family: 'din-web';
+	src: url('../fonts/din-web.eot');
+	src: url('../fonts/din-web.eot@') format('embedded-opentype'),
+		 url('../fonts/din-web.woff') format('woff'),
+		 url('../fonts/din-web.ttf') format('truetype'),
+		 url('../fonts/din-web.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
