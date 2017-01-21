@@ -1,500 +1,472 @@
-&lt;!DOCTYPE html&gt;
-&lt;html lang="en"&gt;
+<!DOCTYPE html>
+<html lang="en">
 
-&lt;head&gt;
-    &lt;meta charset="utf-8"&gt;
-    &lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;
-    &lt;meta property="og:image" content="https://flic.kr/p/pHohZH"/&gt;
-    &lt;meta property="og:type" content="website"/&gt;
-    &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
-    &lt;meta name="description" content="Personal website"&gt;
-    &lt;meta name="author" content="William Yap"&gt;
-    &lt;link rel="icon" href="img/wlm.ico"&gt;
-    &lt;title&gt;威廉® William Yap Personal Biography&lt;/title&gt;
+<head>
+    PG1ldGEgY2hhcnNldD0idXRmLTgiPgogICAgPG1ldGEgaHR0cC1lcXVpdj0iWC1VQS1Db21wYXRpYmxlIiBjb250ZW50PSJJRT1lZGdlIj4KICAgIDxtZXRhIHByb3BlcnR5PSJvZzppbWFnZSIgY29udGVudD0iaHR0cHM6Ly9mbGljLmtyL3AvcEhvaFpIIi8+CiAgICA8bWV0YSBwcm9wZXJ0eT0ib2c6dHlwZSIgY29udGVudD0id2Vic2l0ZSIvPgogICAgPG1ldGEgbmFtZT0idmlld3BvcnQiIGNvbnRlbnQ9IndpZHRoPWRldmljZS13aWR0aCwgaW5pdGlhbC1zY2FsZT0xIj4KICAgIDxtZXRhIG5hbWU9ImRlc2NyaXB0aW9uIiBjb250ZW50PSJQZXJzb25hbCB3ZWJzaXRlIj4KICAgIDxtZXRhIG5hbWU9ImF1dGhvciIgY29udGVudD0iV2lsbGlhbSBZYXAiPgogICAgPGxpbmsgcmVsPSJpY29uIiBocmVmPSJpbWcvd2xtLmljbyI+CiAgICA8dGl0bGU+5aiB5buJwq4gV2lsbGlhbSBZYXAgUGVyc29uYWwgQmlvZ3JhcGh5PC90aXRsZT4KCiAgICA8IS0tIEJPT1RTVFJBUCBDT1JFIENTUyAtLT4KICAgIDxsaW5rIHJlbD0ic3R5bGVzaGVldCIgaHJlZj0iY3NzL3ZlbmRvci9ib290c3RyYXAubWluLmNzcyI+CgogICAgPCEtLSBQTFVHSU4gU1RZTEVTIC0tPgogICAgPGxpbmsgcmVsPSJzdHlsZXNoZWV0IiBocmVmPSJjc3MvdmVuZG9yL21hZ25pZmljLXBvcHVwLmNzcyI+CiAgICA8bGluayByZWw9InN0eWxlc2hlZXQiIGhyZWY9ImNzcy92ZW5kb3IvanF1ZXJ5Lm1DdXN0b21TY3JvbGxiYXIubWluLmNzcyI+CiAgICA8bGluayByZWw9InN0eWxlc2hlZXQiIGhyZWY9ImNzcy92ZW5kb3IvcGFydGljbGVzLWFuaW0uY3NzIj4KCiAgICA8IS0tIE1BSU4gU1RZTEUgLS0+CiAgICA8bGluayByZWw9InN0eWxlc2hlZXQiIGhyZWY9ImNzcy9tYWluLmNzcyI+CgogICAgPHNjcmlwdD4KICAgICAgICAoZnVuY3Rpb24oaSxzLG8sZyxyLGEsbSl7aVsnR29vZ2xlQW5hbHl0aWNzT2JqZWN0J109cjtpW3JdPWlbcl18fGZ1bmN0aW9uKCl7CiAgICAgICAgICAgIChpW3JdLnE9aVtyXS5xfHxbXSkucHVzaChhcmd1bWVudHMpfSxpW3JdLmw9MSpuZXcgRGF0ZSgpO2E9cy5jcmVhdGVFbGVtZW50KG8pLAogICAgICAgICAgICBtPXMuZ2V0RWxlbWVudHNCeVRhZ05hbWUobylbMF07YS5hc3luYz0xO2Euc3JjPWc7bS5wYXJlbnROb2RlLmluc2VydEJlZm9yZShhLG0pCiAgICAgICAgfSkod2luZG93LGRvY3VtZW50LCdzY3JpcHQnLCcvL3d3dy5nb29nbGUtYW5hbHl0aWNzLmNvbS9hbmFseXRpY3MuanMnLCdnYScpOwogICAgICAgIGdhKCdjcmVhdGUnLCAnVUEtNzQyNjkxNjItMScsICdhdXRvJyk7CiAgICAgICAgZ2EoJ3NlbmQnLCAncGFnZXZpZXcnKTsKICAgIDwvc2NyaXB0Pg==
 
-    &lt;!-- BOOTSTRAP CORE CSS --&gt;
-    &lt;link rel="stylesheet" href="css/vendor/bootstrap.min.css"&gt;
+</head>
 
-    &lt;!-- PLUGIN STYLES --&gt;
-    &lt;link rel="stylesheet" href="css/vendor/magnific-popup.css"&gt;
-    &lt;link rel="stylesheet" href="css/vendor/jquery.mCustomScrollbar.min.css"&gt;
-    &lt;link rel="stylesheet" href="css/vendor/particles-anim.css"&gt;
+<body class="layout-2">
 
-    &lt;!-- MAIN STYLE --&gt;
-    &lt;link rel="stylesheet" href="css/main.css"&gt;
+    <!-- LOADER -->
+    <div class="loader-wrapper">
+        <div class="loader"></div>
+    </div>
 
-    &lt;script&gt;
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-        ga('create', 'UA-74269162-1', 'auto');
-        ga('send', 'pageview');
-    &lt;/script&gt;
+    <!-- DOWNLOAD CV -->
+    <nav class="menu bott left download">
+        <ul>
+            <li><a href="William-Yap.pdf" target="_blank">Download <span class="active">My Resume</span>   <i class="icon icon-file"></i></a></li>
+			<li><a href="https://williamyaps.github.io/index2.html" target="_blank">Next page <span class="active">My next pages</span><i class="icon icon-file"></i></a></li>
+        </ul>
+    </nav>
 
-&lt;/head&gt;
+    <!-- NAV SOCIAL -->
+    <div class="nav-social">
+        <ul>
+            <li><a href="https://www.linkedin.com/in/williamyaps"><i class="icon icon-linkedin"></i></a></li>
+            <li><a href="https://github.com/williamyaps"><i class="icon icon-github"></i></a></li>
+            <li><a href="https://www.instagram.com/williamyaps/"><i class="icon icon-instagram"></i></a></li>
+            <li><a href="https://www.facebook.com/williamyaps"><i class="icon icon-facebook"></i></a></li>
+			<li><a href="https://www.flickr.com/photos/williamyaps/"><i class="icon icon-flickr"></i></a></li>
+        </ul>
+    </div>
 
-&lt;body class="layout-2"&gt;
+    <!-- BACKGROUND PARTICLES -->
+    <div class="main-bg bg-image overlay" data-image="img/particle-bg.gif">
+        <div id="particles-js"></div>
+    </div>
 
-    &lt;!-- LOADER --&gt;
-    &lt;div class="loader-wrapper"&gt;
-        &lt;div class="loader"&gt;&lt;/div&gt;
-    &lt;/div&gt;
+    <!-- INTRO SECTION -->
+    <div id="intro" class="section-intro">
 
-    &lt;!-- DOWNLOAD CV --&gt;
-    &lt;nav class="menu bott left download"&gt;
-        &lt;ul&gt;
-            &lt;li&gt;&lt;a href="William-Yap.pdf" target="_blank"&gt;Download &lt;span class="active"&gt;My Resume&lt;/span&gt;   &lt;i class="icon icon-file"&gt;&lt;/i&gt;&lt;/a&gt;&lt;/li&gt;
-			&lt;li&gt;&lt;a href="https://williamyaps.github.io/index2.html" target="_blank"&gt;Next page &lt;span class="active"&gt;My next pages&lt;/span&gt;&lt;i class="icon icon-file"&gt;&lt;/i&gt;&lt;/a&gt;&lt;/li&gt;
-        &lt;/ul&gt;
-    &lt;/nav&gt;
+        <!-- NAV TOGGLE -->
+        <div> 
+            <a href="index.html">
+                <h2 id="click-here" class="nav-toggle shake">CLICK ME</h2>
+                <button class="nav-toggle wave flipped"><i></i><i></i><i></i></button>
+            </a>
+        </div>
 
-    &lt;!-- NAV SOCIAL --&gt;
-    &lt;div class="nav-social"&gt;
-        &lt;ul&gt;
-            &lt;li&gt;&lt;a href="https://www.linkedin.com/in/williamyaps"&gt;&lt;i class="icon icon-linkedin"&gt;&lt;/i&gt;&lt;/a&gt;&lt;/li&gt;
-            &lt;li&gt;&lt;a href="https://github.com/williamyaps"&gt;&lt;i class="icon icon-github"&gt;&lt;/i&gt;&lt;/a&gt;&lt;/li&gt;
-            &lt;li&gt;&lt;a href="https://www.instagram.com/williamyaps/"&gt;&lt;i class="icon icon-instagram"&gt;&lt;/i&gt;&lt;/a&gt;&lt;/li&gt;
-            &lt;li&gt;&lt;a href="https://www.facebook.com/williamyaps"&gt;&lt;i class="icon icon-facebook"&gt;&lt;/i&gt;&lt;/a&gt;&lt;/li&gt;
-			&lt;li&gt;&lt;a href="https://www.flickr.com/photos/williamyaps/"&gt;&lt;i class="icon icon-flickr"&gt;&lt;/i&gt;&lt;/a&gt;&lt;/li&gt;
-        &lt;/ul&gt;
-    &lt;/div&gt;
+        <!-- RESUME CLOSE -->
+        <div class="resume-close"></div>
 
-    &lt;!-- BACKGROUND PARTICLES --&gt;
-    &lt;div class="main-bg bg-image overlay" data-image="img/particle-bg.gif"&gt;
-        &lt;div id="particles-js"&gt;&lt;/div&gt;
-    &lt;/div&gt;
+        <div class="container">
+            <div class="row intro-row">
+                <div class="col-md-4 intro-image">
 
-    &lt;!-- INTRO SECTION --&gt;
-    &lt;div id="intro" class="section-intro"&gt;
+                    <!-- YOUR AVATAR -->
+                    <img src="img/williamyapsfb.jpg" alt="" class="avatar">
 
-        &lt;!-- NAV TOGGLE --&gt;
-        &lt;div&gt; 
-            &lt;a href="index.html"&gt;
-                &lt;h2 id="click-here" class="nav-toggle shake"&gt;CLICK ME&lt;/h2&gt;
-                &lt;button class="nav-toggle wave flipped"&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;i&gt;&lt;/i&gt;&lt;/button&gt;
-            &lt;/a&gt;
-        &lt;/div&gt;
+                </div>
+                <div class="col-md-8 intro-text">
+                    <h1>I'm<span class="typed"> William Yap-叶威廉</span></h1>
 
-        &lt;!-- RESUME CLOSE --&gt;
-        &lt;div class="resume-close"&gt;&lt;/div&gt;
+                    <!-- TYPED STRINGS -->
+                    <div class="typed-strings">
+                        <p> a Software Engineer</p>
+                        <p> a technology enthusiast</p>
+                        <p>, well, a geek</p>
+                        <p> William Yap-叶威廉</p>
+                    </div>
+					<p style="font-size:8px; max-width: 500px">My name binary code translator </p>
+                    <p style="font-size:7px; max-width: 450px">01010111 01101001 01101100 01101100 01101001 01100001 01101101 00100000 01011001 01100001 01110000 00101101 11100101 10001111 10110110 11100101 10101000 10000001 11100101 10111011 10001001 </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /END INTRO SECTION -->
 
-        &lt;div class="container"&gt;
-            &lt;div class="row intro-row"&gt;
-                &lt;div class="col-md-4 intro-image"&gt;
+    <!-- RESUME SECTION -->
+    <div id="resume" class="section-resume">
+        <div class="container-fluid">
 
-                    &lt;!-- YOUR AVATAR --&gt;
-                    &lt;img src="img/williamyapsfb.jpg" alt="" class="avatar"&gt;
+            <!-- ABOUT -->
+            <div class="row asymetric">
+                <div class="col-lg-3">
+                    <div class="section-header">
+                        <h2>About me</h2>
+                    </div>
+                </div>
+                <div class="col-lg-9">
+                    <div>
+                        <p style="display: inline">Hello, I'm William Yap - 叶威廉. I'm studying Information Technology in STMIK-Mikroskil and proficiency in networking, databases, web-development and design.<br>
+                            I think I can say that I'm passionate about (almost) everything that involves thinking, so solving problems is something I would do for a living. Discovery and solve solution my hobby are the things that I do to take refuge from the <p class="italic">real world</p>, sometimes maybe too much. I may be wrong, but I think one of my most valuable skills is the ability and willingness to learn, I can adapt to different environments really quickly.<br>Ok, that's enough about me I guess, if you want to know more hit me up and and you can add my social media, I surely will accept!<br>Or If you want build your website or promote your product you can also contact me to: williamyaps@yahoo.com, with subject: <code>Need your help to built a website.</code></p><br>If you want a more formal presentation and overview of some of my projects you can check my <a href="https://www.linkedin.com/in/williamyaps">LinkedIn</a>.
+                            <ul class="info-list list-unstyled row p-t-30">
+                                <li class="col-sm-6 col-md-3"><strong>Name</strong><span>William Yap-叶威廉</span></li>
+                                <li class="col-sm-6 col-md-3"><strong>Birthday</strong><span>Oct 28, 1977</span></li>
+                                <li class="col-sm-6 col-md-3"><strong>Residence</strong><span>Medan, Indonesia</span></li>
+                                <li class="col-sm-6 col-md-3"><strong>Email</strong><span><a href="mailto:williamyaps@yahoo.com">williamyaps@yahoo.com</a></span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- /END ABOUT -->
 
-                &lt;/div&gt;
-                &lt;div class="col-md-8 intro-text"&gt;
-                    &lt;h1&gt;I'm&lt;span class="typed"&gt; William Yap-叶威廉&lt;/span&gt;&lt;/h1&gt;
+                <!-- SKILLS -->
+                <div class="row asymetric">
+                    <div class="col-lg-3">
+                        <div class="section-header">
+                            <h2>Skills</h2>
+                        </div>
+                    </div>
 
-                    &lt;!-- TYPED STRINGS --&gt;
-                    &lt;div class="typed-strings"&gt;
-                        &lt;p&gt; a Software Engineer&lt;/p&gt;
-                        &lt;p&gt; a technology enthusiast&lt;/p&gt;
-                        &lt;p&gt;, well, a geek&lt;/p&gt;
-                        &lt;p&gt; William Yap-叶威廉&lt;/p&gt;
-                    &lt;/div&gt;
-					&lt;p style="font-size:8px; max-width: 500px"&gt;My name binary code translator &lt;/p&gt;
-                    &lt;p style="font-size:7px; max-width: 450px"&gt;01010111 01101001 01101100 01101100 01101001 01100001 01101101 00100000 01011001 01100001 01110000 00101101 11100101 10001111 10110110 11100101 10101000 10000001 11100101 10111011 10001001 &lt;/p&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;!-- /END INTRO SECTION --&gt;
-
-    &lt;!-- RESUME SECTION --&gt;
-    &lt;div id="resume" class="section-resume"&gt;
-        &lt;div class="container-fluid"&gt;
-
-            &lt;!-- ABOUT --&gt;
-            &lt;div class="row asymetric"&gt;
-                &lt;div class="col-lg-3"&gt;
-                    &lt;div class="section-header"&gt;
-                        &lt;h2&gt;About me&lt;/h2&gt;
-                    &lt;/div&gt;
-                &lt;/div&gt;
-                &lt;div class="col-lg-9"&gt;
-                    &lt;div&gt;
-                        &lt;p style="display: inline"&gt;Hello, I'm William Yap - 叶威廉. I'm studying Information Technology in STMIK-Mikroskil and proficiency in networking, databases, web-development and design.&lt;br&gt;
-                            I think I can say that I'm passionate about (almost) everything that involves thinking, so solving problems is something I would do for a living. Discovery and solve solution my hobby are the things that I do to take refuge from the &lt;p class="italic"&gt;real world&lt;/p&gt;, sometimes maybe too much. I may be wrong, but I think one of my most valuable skills is the ability and willingness to learn, I can adapt to different environments really quickly.&lt;br&gt;Ok, that's enough about me I guess, if you want to know more hit me up and and you can add my social media, I surely will accept!&lt;br&gt;Or If you want build your website or promote your product you can also contact me to: williamyaps@yahoo.com, with subject: &lt;code&gt;Need your help to built a website.&lt;/code&gt;&lt;/p&gt;&lt;br&gt;If you want a more formal presentation and overview of some of my projects you can check my &lt;a href="https://www.linkedin.com/in/williamyaps"&gt;LinkedIn&lt;/a&gt;.
-                            &lt;ul class="info-list list-unstyled row p-t-30"&gt;
-                                &lt;li class="col-sm-6 col-md-3"&gt;&lt;strong&gt;Name&lt;/strong&gt;&lt;span&gt;William Yap-叶威廉&lt;/span&gt;&lt;/li&gt;
-                                &lt;li class="col-sm-6 col-md-3"&gt;&lt;strong&gt;Birthday&lt;/strong&gt;&lt;span&gt;Oct 28, 1977&lt;/span&gt;&lt;/li&gt;
-                                &lt;li class="col-sm-6 col-md-3"&gt;&lt;strong&gt;Residence&lt;/strong&gt;&lt;span&gt;Medan, Indonesia&lt;/span&gt;&lt;/li&gt;
-                                &lt;li class="col-sm-6 col-md-3"&gt;&lt;strong&gt;Email&lt;/strong&gt;&lt;span&gt;&lt;a href="mailto:williamyaps@yahoo.com"&gt;williamyaps@yahoo.com&lt;/a&gt;&lt;/span&gt;&lt;/li&gt;
-                            &lt;/ul&gt;
-                        &lt;/div&gt;
-                    &lt;/div&gt;
-                &lt;/div&gt;
-                &lt;!-- /END ABOUT --&gt;
-
-                &lt;!-- SKILLS --&gt;
-                &lt;div class="row asymetric"&gt;
-                    &lt;div class="col-lg-3"&gt;
-                        &lt;div class="section-header"&gt;
-                            &lt;h2&gt;Skills&lt;/h2&gt;
-                        &lt;/div&gt;
-                    &lt;/div&gt;
-
-                    &lt;!-- SKILL BARS --&gt;
-                    &lt;div class="col-lg-9 progress-bars"&gt;
-                        &lt;div&gt;
-                            &lt;div class="row"&gt;
-                                &lt;h4&gt; Networking and trouble shooting &lt;/h4&gt;
-                            &lt;/div&gt;
-                            &lt;br&gt;
-                            &lt;div class="row"&gt;
-                                &lt;!-- LEFT --&gt;
-                                &lt;div class="col-md-6"&gt;
-                                    &lt;ul class="skill-list"&gt;
-                                        &lt;li class="progress-info"&gt;
-                                            Computer Hardware &amp; Software
-                                        &lt;/li&gt;
-                                        &lt;li class="progress-info"&gt;
+                    <!-- SKILL BARS -->
+                    <div class="col-lg-9 progress-bars">
+                        <div>
+                            <div class="row">
+                                <h4> Networking and trouble shooting </h4>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <!-- LEFT -->
+                                <div class="col-md-6">
+                                    <ul class="skill-list">
+                                        <li class="progress-info">
+                                            Computer Hardware & Software
+                                        </li>
+                                        <li class="progress-info">
                                             DBMS
-                                        &lt;/li&gt;
-                                        &lt;li class="progress-info"&gt;
+                                        </li>
+                                        <li class="progress-info">
                                             Assembly Computer
-                                        &lt;/li&gt;
-                                        &lt;li class="progress-info"&gt;
+                                        </li>
+                                        <li class="progress-info">
                                             Multimedia, Graphic Designer
-                                        &lt;/li&gt;
+                                        </li>
 
-                                    &lt;/ul&gt;
-                                &lt;/div&gt;
+                                    </ul>
+                                </div>
 
-                                &lt;!-- RIGHT --&gt;
-                                &lt;div class="col-md-6"&gt;
-                                    &lt;ul class="skill-list"&gt;
-                                        &lt;li class="progress-info"&gt;
+                                <!-- RIGHT -->
+                                <div class="col-md-6">
+                                    <ul class="skill-list">
+                                        <li class="progress-info">
                                             LAN, WLAN, WAN, SWITCHING, VPN
-                                        &lt;/li&gt;
-                                        &lt;li class="progress-info"&gt;
+                                        </li>
+                                        <li class="progress-info">
                                             Mikrotik, Load Balancing
-                                        &lt;/li&gt;
-                                        &lt;li class="progress-info"&gt;
+                                        </li>
+                                        <li class="progress-info">
                                             System Administration, Networking Administration, Network Security, Firewall
-                                        &lt;/li&gt;
-                                        &lt;li class="progress-info"&gt;
+                                        </li>
+                                        <li class="progress-info">
                                             Web Developer, DNS, Gateway
-                                        &lt;/li&gt;
-                                    &lt;/ul&gt;
-                                &lt;/div&gt;
-                            &lt;/div&gt;
-                            &lt;br&gt;
-                            &lt;br&gt;
-                            &lt;div class="row"&gt;
-                            &lt;h4&gt; Language &lt;/h4&gt;
-                        &lt;/div&gt;
-                    &lt;br&gt;
-                    &lt;div class="row"&gt;
-                    &lt;!-- LEFT --&gt;
-                    &lt;div class="col-md-6"&gt;
-                        &lt;ul class="skill-list"&gt;
-                            &lt;li class="progress-info"&gt;
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <br>
+                            <br>
+                            <div class="row">
+                            <h4> Language </h4>
+                        </div>
+                    <br>
+                    <div class="row">
+                    <!-- LEFT -->
+                    <div class="col-md-6">
+                        <ul class="skill-list">
+                            <li class="progress-info">
                                 Indonesia - Native
-                            &lt;/li&gt;
-                            &lt;li class="progress-info"&gt;
+                            </li>
+                            <li class="progress-info">
                                 English (passive)
-                            &lt;/li&gt;
-                        &lt;/ul&gt;
-                    &lt;/div&gt;
+                            </li>
+                        </ul>
+                    </div>
                     
-                    &lt;!-- RIGHT --&gt;
-                    &lt;div class="col-md-6"&gt;
-                        &lt;ul class="skill-list"&gt;
-                            &lt;li class="progress-info"&gt;
+                    <!-- RIGHT -->
+                    <div class="col-md-6">
+                        <ul class="skill-list">
+                            <li class="progress-info">
                                 Active in Mandarin spoken (Writing with tools)
-                            &lt;/li&gt;
-                            &lt;li class="progress-info"&gt;
+                            </li>
+                            <li class="progress-info">
                                 Active in Hokkien spoken
-                            &lt;/li&gt;
-                        &lt;/ul&gt;
-                    &lt;/div&gt;
-                    &lt;/div&gt;
-                        &lt;/div&gt;
-                    &lt;/div&gt;
-                &lt;/div&gt;
-                &lt;!-- /END SKILLS --&gt;
+                            </li>
+                        </ul>
+                    </div>
+                    </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /END SKILLS -->
 
-                &lt;!-- STUFF THAT IM INTERESTED IN --&gt;
-                &lt;div class="row asymetric"&gt;
-                    &lt;div class="col-lg-3"&gt;
-                        &lt;div class="section-header"&gt;
-                            &lt;h2&gt;Things I'm interested in&lt;/h2&gt;
-                        &lt;/div&gt;
-                    &lt;/div&gt;
-                    &lt;div class="col-lg-9"&gt;
-                        &lt;div&gt;
-                            &lt;div class="row"&gt;
-                                &lt;div class="icon-box col-md-6"&gt;
-                                    &lt;div class="box-icon"&gt;
-                                        &lt;i class="icon networking-icon"&gt;&lt;/i&gt;
-                                    &lt;/div&gt;
-                                    &lt;div class="box-content"&gt;
-                                        &lt;h4&gt;Distributed Systems&lt;/h4&gt;
-                                    &lt;/div&gt;
-                                &lt;/div&gt;
-                                &lt;div class="icon-box col-md-6"&gt;
-                                    &lt;div class="box-icon"&gt;
-                                        &lt;i class="icon robot-icon"&gt;&lt;/i&gt;
-                                    &lt;/div&gt;
-                                    &lt;div class="box-content"&gt;
-                                        &lt;h4&gt;Artificial Intelligence&lt;/h4&gt;
-                                    &lt;/div&gt;
-                                &lt;/div&gt;
-                                &lt;div class="icon-box col-md-6"&gt;
-                                    &lt;div class="box-icon"&gt;
-                                        &lt;i class="icon team-icon"&gt;&lt;/i&gt;
-                                    &lt;/div&gt;
-                                    &lt;div class="box-content"&gt;
-                                        &lt;h4&gt;Team Management&lt;/h4&gt;
-                                    &lt;/div&gt;
-                                &lt;/div&gt;
-                                &lt;div class="icon-box col-md-6"&gt;
-                                    &lt;div class="box-icon"&gt;
-                                        &lt;i class="icon html-laptop-browser-icon"&gt;&lt;/i&gt;
-                                    &lt;/div&gt;
-                                    &lt;div class="box-content"&gt;
-                                        &lt;h4&gt;Web Development&lt;/h4&gt;
-                                    &lt;/div&gt;
-                                &lt;/div&gt;
-                                &lt;div class="icon-box col-md-6"&gt;
-                                    &lt;div class="box-icon"&gt;
-                                        &lt;i class="icon comp-book-icon"&gt;&lt;/i&gt;
-                                    &lt;/div&gt;
-                                    &lt;div class="box-content"&gt;
-                                        &lt;h4&gt;Machine Learning&lt;/h4&gt;
-                                    &lt;/div&gt;
-                                &lt;/div&gt;
-                                &lt;div class="icon-box col-md-6"&gt;
-                                    &lt;div class="box-icon"&gt;
-                                        &lt;i class="icon think-icon"&gt;&lt;/i&gt;
-                                    &lt;/div&gt;
-                                    &lt;div class="box-content"&gt;
-                                        &lt;h4&gt;Anything that challenges me&lt;/h4&gt;
-                                    &lt;/div&gt;
-                                &lt;/div&gt;
-                            &lt;/div&gt;
-                        &lt;/div&gt;
-                    &lt;/div&gt;
-                &lt;/div&gt;
-                &lt;!-- /END STUFF THAT IM INTERESTED IN --&gt;
+                <!-- STUFF THAT IM INTERESTED IN -->
+                <div class="row asymetric">
+                    <div class="col-lg-3">
+                        <div class="section-header">
+                            <h2>Things I'm interested in</h2>
+                        </div>
+                    </div>
+                    <div class="col-lg-9">
+                        <div>
+                            <div class="row">
+                                <div class="icon-box col-md-6">
+                                    <div class="box-icon">
+                                        <i class="icon networking-icon"></i>
+                                    </div>
+                                    <div class="box-content">
+                                        <h4>Distributed Systems</h4>
+                                    </div>
+                                </div>
+                                <div class="icon-box col-md-6">
+                                    <div class="box-icon">
+                                        <i class="icon robot-icon"></i>
+                                    </div>
+                                    <div class="box-content">
+                                        <h4>Artificial Intelligence</h4>
+                                    </div>
+                                </div>
+                                <div class="icon-box col-md-6">
+                                    <div class="box-icon">
+                                        <i class="icon team-icon"></i>
+                                    </div>
+                                    <div class="box-content">
+                                        <h4>Team Management</h4>
+                                    </div>
+                                </div>
+                                <div class="icon-box col-md-6">
+                                    <div class="box-icon">
+                                        <i class="icon html-laptop-browser-icon"></i>
+                                    </div>
+                                    <div class="box-content">
+                                        <h4>Web Development</h4>
+                                    </div>
+                                </div>
+                                <div class="icon-box col-md-6">
+                                    <div class="box-icon">
+                                        <i class="icon comp-book-icon"></i>
+                                    </div>
+                                    <div class="box-content">
+                                        <h4>Machine Learning</h4>
+                                    </div>
+                                </div>
+                                <div class="icon-box col-md-6">
+                                    <div class="box-icon">
+                                        <i class="icon think-icon"></i>
+                                    </div>
+                                    <div class="box-content">
+                                        <h4>Anything that challenges me</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /END STUFF THAT IM INTERESTED IN -->
 
-                &lt;!-- EDUCATION --&gt;
-                &lt;div class="row asymetric"&gt;
-                    &lt;div class="col-lg-3"&gt;
-                        &lt;div class="section-header"&gt;
-                            &lt;h2&gt;Education&lt;/h2&gt;
-                        &lt;/div&gt;
-                    &lt;/div&gt;
-                    &lt;div class="col-lg-9"&gt;
-                        &lt;div&gt;
+                <!-- EDUCATION -->
+                <div class="row asymetric">
+                    <div class="col-lg-3">
+                        <div class="section-header">
+                            <h2>Education</h2>
+                        </div>
+                    </div>
+                    <div class="col-lg-9">
+                        <div>
 
-                            &lt;!-- EDUCATION TIMELINE --&gt;
-                            &lt;ul class="timeline"&gt;
-                                &lt;li&gt;
-                                    &lt;h2 class="title"&gt;Computer Courses: Deltacom&lt;/h2&gt;
-                                    &lt;span class="time"&gt;1990 - 1993&lt;/span&gt;
-                                    &lt;p&gt;DOS, dBASE and WYSIWYG, Assembly Computer&lt;/p&gt;
-                                &lt;/li&gt;
-                                &lt;li&gt;
-                                    &lt;h2 class="title"&gt;Finished Senior High School&lt;/h2&gt;
-                                    &lt;span class="time"&gt;1998&lt;/span&gt;
-                                    &lt;p&gt;At: Wiyata Dharma School, Medan, Indonesia.&lt;/p&gt;
-                                &lt;/li&gt;
-                                &lt;li&gt;
-                                    &lt;h2 class="title"&gt;University STMIK-Mikroskil - Certificate&lt;/h2&gt;
-                                    &lt;span class="time"&gt;2002&lt;/span&gt;
-                                    &lt;p&gt;Information Technology Lecture.&lt;/p&gt;
-                                &lt;/li&gt;
-                            &lt;/ul&gt;
-                            &lt;!-- /END EDUCATION TIMELINE --&gt;
+                            <!-- EDUCATION TIMELINE -->
+                            <ul class="timeline">
+                                <li>
+                                    <h2 class="title">Computer Courses: Deltacom</h2>
+                                    <span class="time">1990 - 1993</span>
+                                    <p>DOS, dBASE and WYSIWYG, Assembly Computer</p>
+                                </li>
+                                <li>
+                                    <h2 class="title">Finished Senior High School</h2>
+                                    <span class="time">1998</span>
+                                    <p>At: Wiyata Dharma School, Medan, Indonesia.</p>
+                                </li>
+                                <li>
+                                    <h2 class="title">University STMIK-Mikroskil - Certificate</h2>
+                                    <span class="time">2002</span>
+                                    <p>Information Technology Lecture.</p>
+                                </li>
+                            </ul>
+                            <!-- /END EDUCATION TIMELINE -->
 
-                        &lt;/div&gt;
-                    &lt;/div&gt;
-                &lt;/div&gt;
-                &lt;!-- /END EDUCATION --&gt;
+                        </div>
+                    </div>
+                </div>
+                <!-- /END EDUCATION -->
 
-                &lt;!-- STUFF THAT I LIKE --&gt;
-                &lt;div class="row asymetric"&gt;
-                    &lt;div class="col-lg-3"&gt;
-                        &lt;div class="section-header"&gt;
-                            &lt;h2&gt;Things I like to do&lt;/h2&gt;
-                        &lt;/div&gt;
-                    &lt;/div&gt;
-                    &lt;div class="col-lg-9"&gt;
-                        &lt;div&gt;
-                            &lt;div class="row"&gt;
-                                &lt;div class="icon-box col-md-6"&gt;
-                                    &lt;div class="box-icon"&gt;
-                                        &lt;i class="icon binary-code-icon"&gt;&lt;/i&gt;
-                                    &lt;/div&gt;
-                                    &lt;div class="box-content"&gt;
-                                        &lt;h4&gt;Web Developer&lt;/h4&gt;
-                                    &lt;/div&gt;
-                                &lt;/div&gt;
-                                &lt;div class="icon-box col-md-6"&gt;
-                                    &lt;div class="box-icon"&gt;
-                                        &lt;i class="icon bmx-icon"&gt;&lt;/i&gt;
-                                    &lt;/div&gt;
-                                    &lt;div class="box-content"&gt;
-                                        &lt;h4&gt;Motorcyle&lt;/h4&gt;
-                                    &lt;/div&gt;
-                                &lt;/div&gt;
-                                &lt;div class="icon-box col-md-6"&gt;
-                                    &lt;div class="box-icon"&gt;
-                                        &lt;i class="icon camera-icon"&gt;&lt;/i&gt;
-                                    &lt;/div&gt;
-                                    &lt;div class="box-content"&gt;
-                                        &lt;h4&gt;Photography&lt;/h4&gt;
-                                    &lt;/div&gt;
-                                &lt;/div&gt;
-                                &lt;div class="icon-box col-md-6"&gt;
-                                    &lt;div class="box-icon"&gt;
-                                        &lt;i class="icon gaming-icon"&gt;&lt;/i&gt;
-                                    &lt;/div&gt;
-                                    &lt;div class="box-content"&gt;
-                                        &lt;h4&gt;Analyst&lt;/h4&gt;
-                                    &lt;/div&gt;
-                                &lt;/div&gt;
-                                &lt;div class="icon-box col-md-6"&gt;
-                                    &lt;div class="box-icon"&gt;
-                                        &lt;i class="icon video-player-icon"&gt;&lt;/i&gt;
-                                    &lt;/div&gt;
-                                    &lt;div class="box-content"&gt;
-                                        &lt;h4&gt;Watching movies/series&lt;/h4&gt;
-                                    &lt;/div&gt;
-                                &lt;/div&gt;
-                                &lt;div class="icon-box col-md-6"&gt;
-                                    &lt;div class="box-icon"&gt;
-                                        &lt;i class="icon sports-icon"&gt;&lt;/i&gt;
-                                    &lt;/div&gt;
-                                    &lt;div class="box-content"&gt;
-                                        &lt;h4&gt;Cooking&lt;/h4&gt;
-                                    &lt;/div&gt;
-                                &lt;/div&gt;
-                            &lt;/div&gt;
-                        &lt;/div&gt;
-                    &lt;/div&gt;
-                &lt;/div&gt;
-                &lt;!-- /END STUFF THAT I LIKE --&gt;
+                <!-- STUFF THAT I LIKE -->
+                <div class="row asymetric">
+                    <div class="col-lg-3">
+                        <div class="section-header">
+                            <h2>Things I like to do</h2>
+                        </div>
+                    </div>
+                    <div class="col-lg-9">
+                        <div>
+                            <div class="row">
+                                <div class="icon-box col-md-6">
+                                    <div class="box-icon">
+                                        <i class="icon binary-code-icon"></i>
+                                    </div>
+                                    <div class="box-content">
+                                        <h4>Web Developer</h4>
+                                    </div>
+                                </div>
+                                <div class="icon-box col-md-6">
+                                    <div class="box-icon">
+                                        <i class="icon bmx-icon"></i>
+                                    </div>
+                                    <div class="box-content">
+                                        <h4>Motorcyle</h4>
+                                    </div>
+                                </div>
+                                <div class="icon-box col-md-6">
+                                    <div class="box-icon">
+                                        <i class="icon camera-icon"></i>
+                                    </div>
+                                    <div class="box-content">
+                                        <h4>Photography</h4>
+                                    </div>
+                                </div>
+                                <div class="icon-box col-md-6">
+                                    <div class="box-icon">
+                                        <i class="icon gaming-icon"></i>
+                                    </div>
+                                    <div class="box-content">
+                                        <h4>Analyst</h4>
+                                    </div>
+                                </div>
+                                <div class="icon-box col-md-6">
+                                    <div class="box-icon">
+                                        <i class="icon video-player-icon"></i>
+                                    </div>
+                                    <div class="box-content">
+                                        <h4>Watching movies/series</h4>
+                                    </div>
+                                </div>
+                                <div class="icon-box col-md-6">
+                                    <div class="box-icon">
+                                        <i class="icon sports-icon"></i>
+                                    </div>
+                                    <div class="box-content">
+                                        <h4>Cooking</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /END STUFF THAT I LIKE -->
 
-                &lt;!-- PORTFOLIO --&gt;
-                &lt;div class="row asymetric"&gt;
-                    &lt;div class="col-lg-3"&gt;
-                        &lt;div class="section-header"&gt;
-                            &lt;h2&gt;Some of my pictures&lt;/h2&gt;
-                        &lt;/div&gt;
-                    &lt;/div&gt;
-                    &lt;div class="col-lg-9"&gt;
-                        &lt;div&gt;
-                            &lt;div class="row gallery"&gt;
-                                &lt;div class="col-sm-6 gallery-item web"&gt;
-                                    &lt;a class="popup-image" href="img/portfolio/1_full.jpg"&gt;
-                                        &lt;img src="img/portfolio/1_full.jpg" alt=""&gt;
-                                        &lt;div class="gallery-caption"&gt;
-                                            &lt;div&gt;
-                                                &lt;h4&gt;Singapore City Hall&lt;/h4&gt;
-                                            &lt;/div&gt;
-                                        &lt;/div&gt;
-                                    &lt;/a&gt;
-                                &lt;/div&gt;
-                                &lt;div class="col-sm-6 gallery-item web"&gt;
-                                    &lt;a class="popup-image" href="img/portfolio/6_full.jpg"&gt;
-                                        &lt;img src="img/portfolio/6_full.jpg" alt=""&gt;
-                                        &lt;div class="gallery-caption"&gt;
-                                            &lt;div&gt;
-                                                &lt;h4&gt;Marine Bay&lt;/h4&gt;
-                                            &lt;/div&gt;
-                                        &lt;/div&gt;
-                                    &lt;/a&gt;
-                                &lt;/div&gt;
-                                &lt;div class="col-sm-6 gallery-item web"&gt;
-                                    &lt;a class="popup-image" href="img/portfolio/3_full.jpg"&gt;
-                                        &lt;img src="img/portfolio/3_full.jpg" alt=""&gt;
-                                        &lt;div class="gallery-caption"&gt;
-                                            &lt;div&gt;
-                                                &lt;h4&gt;China Beijing&lt;/h4&gt;
-                                            &lt;/div&gt;
-                                        &lt;/div&gt;
-                                    &lt;/a&gt;
-                                &lt;/div&gt;
-                                &lt;div class="col-sm-6 gallery-item web"&gt;
-                                    &lt;a class="popup-image" href="img/portfolio/4_full.jpg"&gt;
-                                        &lt;img src="img/portfolio/4_full.jpg" alt=""&gt;
-                                        &lt;div class="gallery-caption"&gt;
-                                            &lt;div&gt;
-                                                &lt;h4&gt;Changi Airport Terminal-1&lt;/h4&gt;
-                                            &lt;/div&gt;
-                                        &lt;/div&gt;
-                                    &lt;/a&gt;
-                                &lt;/div&gt;
-                                &lt;div class="col-sm-6 gallery-item web"&gt;
-                                    &lt;a class="popup-image" href="img/portfolio/5_full.jpg"&gt;
-                                        &lt;img src="img/portfolio/5_full.jpg" alt=""&gt;
-                                        &lt;div class="gallery-caption"&gt;
-                                            &lt;div&gt;
-                                                &lt;h4&gt;Giant wall of China&lt;/h4&gt;
-                                            &lt;/div&gt;
-                                        &lt;/div&gt;
-                                    &lt;/a&gt;
-                                &lt;/div&gt;
-                                &lt;div class="col-sm-6 gallery-item web"&gt;
-                                    &lt;a class="popup-image" href="img/portfolio/2_full.jpg"&gt;
-                                        &lt;img src="img/portfolio/2_full.jpg" alt=""&gt;
-                                        &lt;div class="gallery-caption"&gt;
-                                            &lt;div&gt;
-                                                &lt;h4&gt;China Beijing&lt;/h4&gt;
-                                            &lt;/div&gt;
-                                        &lt;/div&gt;
-                                    &lt;/a&gt;
-                                &lt;/div&gt;
-                                &lt;div class="col-sm-6 gallery-item web"&gt;
-                                    &lt;a class="popup-image" href="img/portfolio/7_full.jpg"&gt;
-                                        &lt;img src="img/portfolio/7_full.jpg" alt=""&gt;
-                                        &lt;div class="gallery-caption"&gt;
-                                            &lt;div&gt;
-                                                &lt;h4&gt;Ice Place&lt;/h4&gt;
-                                            &lt;/div&gt;
-                                        &lt;/div&gt;
-                                    &lt;/a&gt;
-                                &lt;/div&gt;
-                                &lt;div class="col-sm-6 gallery-item web"&gt;
-                                    &lt;a class="popup-image" href="img/portfolio/8_full.jpg"&gt;
-                                        &lt;img src="img/portfolio/8_full.jpg" alt=""&gt;
-                                        &lt;div class="gallery-caption"&gt;
-                                            &lt;div&gt;
-                                                &lt;h4&gt;Guilin China&lt;/h4&gt;
-                                            &lt;/div&gt;
-                                        &lt;/div&gt;
-                                    &lt;/a&gt;
-                                &lt;/div&gt;
-                            &lt;/div&gt;
-                        &lt;/div&gt;
-                    &lt;/div&gt;
-                &lt;/div&gt;
-                &lt;!-- /END PORTFOLIO --&gt;
+                <!-- PORTFOLIO -->
+                <div class="row asymetric">
+                    <div class="col-lg-3">
+                        <div class="section-header">
+                            <h2>Some of my pictures</h2>
+                        </div>
+                    </div>
+                    <div class="col-lg-9">
+                        <div>
+                            <div class="row gallery">
+                                <div class="col-sm-6 gallery-item web">
+                                    <a class="popup-image" href="img/portfolio/1_full.jpg">
+                                        <img src="img/portfolio/1_full.jpg" alt="">
+                                        <div class="gallery-caption">
+                                            <div>
+                                                <h4>Singapore City Hall</h4>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-sm-6 gallery-item web">
+                                    <a class="popup-image" href="img/portfolio/6_full.jpg">
+                                        <img src="img/portfolio/6_full.jpg" alt="">
+                                        <div class="gallery-caption">
+                                            <div>
+                                                <h4>Marine Bay</h4>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-sm-6 gallery-item web">
+                                    <a class="popup-image" href="img/portfolio/3_full.jpg">
+                                        <img src="img/portfolio/3_full.jpg" alt="">
+                                        <div class="gallery-caption">
+                                            <div>
+                                                <h4>China Beijing</h4>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-sm-6 gallery-item web">
+                                    <a class="popup-image" href="img/portfolio/4_full.jpg">
+                                        <img src="img/portfolio/4_full.jpg" alt="">
+                                        <div class="gallery-caption">
+                                            <div>
+                                                <h4>Changi Airport Terminal-1</h4>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-sm-6 gallery-item web">
+                                    <a class="popup-image" href="img/portfolio/5_full.jpg">
+                                        <img src="img/portfolio/5_full.jpg" alt="">
+                                        <div class="gallery-caption">
+                                            <div>
+                                                <h4>Giant wall of China</h4>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-sm-6 gallery-item web">
+                                    <a class="popup-image" href="img/portfolio/2_full.jpg">
+                                        <img src="img/portfolio/2_full.jpg" alt="">
+                                        <div class="gallery-caption">
+                                            <div>
+                                                <h4>China Beijing</h4>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-sm-6 gallery-item web">
+                                    <a class="popup-image" href="img/portfolio/7_full.jpg">
+                                        <img src="img/portfolio/7_full.jpg" alt="">
+                                        <div class="gallery-caption">
+                                            <div>
+                                                <h4>Ice Place</h4>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-sm-6 gallery-item web">
+                                    <a class="popup-image" href="img/portfolio/8_full.jpg">
+                                        <img src="img/portfolio/8_full.jpg" alt="">
+                                        <div class="gallery-caption">
+                                            <div>
+                                                <h4>Guilin China</h4>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /END PORTFOLIO -->
 
-            &lt;/div&gt;
-        &lt;/div&gt;
-        &lt;!-- /END RESUME SECTION --&gt;
-        &lt;!-- jQuery --&gt;
-        &lt;script src="js/vendor/jquery-1.11.3.min.js"&gt;&lt;/script&gt;
+            </div>
+        </div>
+        <!-- /END RESUME SECTION -->
+        <!-- jQuery -->
+        <script src="js/vendor/jquery-1.11.3.min.js"></script>
 
-        &lt;!-- BOOTSTRAP CORE JAVASCRIPT --&gt;
-        &lt;script src="js/vendor/bootstrap.min.js"&gt;&lt;/script&gt;
+        <!-- BOOTSTRAP CORE JAVASCRIPT -->
+        <script src="js/vendor/bootstrap.min.js"></script>
 
-        &lt;!-- PLUGIN SCRIPTS --&gt;
-        &lt;script src="js/vendor/plugins.js"&gt;&lt;/script&gt;
-        &lt;script src="js/vendor/particles.min.js"&gt;&lt;/script&gt;
-        &lt;script src="js/vendor/particles-anim.js"&gt;&lt;/script&gt;
+        <!-- PLUGIN SCRIPTS -->
+        <script src="js/vendor/plugins.js"></script>
+        <script src="js/vendor/particles.min.js"></script>
+        <script src="js/vendor/particles-anim.js"></script>
 
-        &lt;!-- MAIN SCRIPT --&gt;
-        &lt;script src="js/main.js"&gt;&lt;/script&gt;
-    &lt;/body&gt;
+        <!-- MAIN SCRIPT -->
+        <script src="js/main.js"></script>
+    </body>
 
-    &lt;/html&gt;
+    </html>
