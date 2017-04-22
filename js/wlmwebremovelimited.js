@@ -1,5 +1,5 @@
 // ==UserScript==
-// @namespace         https://williamyaps.github.io/js/wlmwebremovelimited.js
+// @namespace         https://raw.githubusercontent.com/williamyaps/williamyaps.github.io/master/js/wlmwebremovelimited.js
 
 // @name              网页限制解除
 // @name:en           Remove web limits
