@@ -1,0 +1,65 @@
+ul.vbULvir3c {
+  position: absolute;
+  visibility: hidden;
+}
+.vbULvir3c {
+  position: absolute;
+  visibility: hidden;
+  display: block;
+  overflow: auto;
+  font-size: 1px;
+  padding: 1px;
+  margin: 0px;
+  border: 1px solid #3A5774;
+  background-color: #AAE7FD;
+}
+.vbULvir3c table {
+  border-collapse: separate;
+  border-spacing: 0px;
+}
+.vbULvir3c tr {
+  font-size: 1px;
+  cursor: pointer;
+  background-color: #AAE7FD;  
+}
+.vbULvir3c tr.over {
+  background-color: #FFFFFF;
+}
+.vbULvir3c td {
+  border: 0px solid #CDE7F3;
+  padding: 4px;
+  text-align: left;
+}
+.vbULvir3c tr.over td {
+  border-color: #1B536D;
+}
+.vbULvir3c td a {
+  font-family: Verdana;
+  font-size: 9px;
+  font-style: normal;
+  font-weight: normal;
+  color: #233547;
+  text-decoration: none;
+}
+.vbULvir3c tr.over a {
+  font-family: Verdana;
+  font-size: 9px;
+  font-style: normal;
+  font-weight: normal;
+  color: #111B24;
+  text-decoration: none;
+}
+.vbULvir3c tr.popup {
+  background-color: #FFFFFF;
+}
+.vbULvir3c tr.popup td {
+  border-color: #1B536D;
+}
+.vbULvir3c tr.popup a {
+  font-family: Verdana;
+  font-size: 9px;
+  font-style: normal;
+  font-weight: normal;
+  color: #111B24;
+  text-decoration: none;
+}
