@@ -9,7 +9,7 @@ function init_api() {
     Flashphoner.init({});
     //Connect to WCS server over websockets
     session = Flashphoner.createSession({
-        urlServer: "wss://demo.flashphoner.com" //specify the address of your WCS
+        urlServer: "http://103.120.172.74:4800" //specify the address of your WCS
     }).on(SESSION_STATUS.ESTABLISHED, function(session) {
         console.log("ESTABLISHED");
     });
@@ -37,7 +37,7 @@ function playClick() {
 //Playing stream
 function playStream() {
     session.createStream({
-        name: "rtsp://myrtspserver/stream1", //specify the RTSP stream address
+        name: "http://103.120.172.74:4800", //specify the RTSP stream address
         display: document.getElementById("play"),
     }).play();
 }
