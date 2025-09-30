@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
-Sitemap: https://williamyaps.github.io/wlmjavascript/sitemap.xml
+
+Sitemap: https://williamyaps.github.io/sitemap.xml
