@@ -25,11 +25,10 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 40px 20px;
+      padding: 30px 15px;
       overflow-x: hidden;
     }
 
-    /* Canvas Background */
     #particle-canvas {
       position: fixed;
       top: 0;
@@ -40,23 +39,68 @@
       pointer-events: none;
     }
 
-    /* Container Vertikal */
+    /* === Jam & Marquee === */
+    .clock-wrapper {
+      width: 100%;
+      max-width: 600px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .marquee {
+      overflow: hidden;
+      white-space: nowrap;
+      margin: 8px 0 15px;
+    }
+
+    .marquee span {
+      display: inline-block;
+      padding-left: 100%;
+      animation: scrollText 18s linear infinite;
+      color: #b0c4ff;
+      font-weight: 500;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    @keyframes scrollText {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(-100%, 0); }
+    }
+
+    .digital-clock {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #ffffff;
+      text-shadow: 0 0 15px rgba(100, 200, 255, 0.7);
+      margin-bottom: 10px;
+      padding: 10px 20px;
+      background: rgba(0, 0, 0, 0.35);
+      border-radius: 40px;
+      display: inline-block;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .digital-clock .time {
+      color: #4facfe;
+    }
+
     .hub-vertical {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 16px;
       width: 100%;
-      max-width: 600px; /* Lebar seperti menu di gambar */
+      max-width: 600px;
       perspective: 1000px;
     }
 
-    /* Style Kartu (Pill) */
     .hub-card {
       width: 100%;
       background: var(--card-bg);
       border: 1px solid var(--border);
-      border-radius: 50px; /* Bentuk Pill */
+      border-radius: 50px;
       overflow: hidden;
       transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       position: relative;
@@ -64,11 +108,10 @@
       transform-style: preserve-3d;
     }
 
-    /* Header Tombol */
     .card-header {
       padding: 18px 25px;
       font-weight: 700;
-      font-size: 1rem;
+      font-size: 2.1rem;               /* sedikit lebih besar */
       letter-spacing: 0.5px;
       cursor: pointer;
       display: flex;
@@ -77,6 +120,7 @@
       background: linear-gradient(90deg, rgba(255,255,255,0.05) 0%, transparent 100%);
       z-index: 2;
       position: relative;
+      user-select: none;
     }
 
     .card-header span {
@@ -85,7 +129,6 @@
       gap: 10px;
     }
 
-    /* Arrow Icon */
     .card-header::after {
       content: '+';
       font-size: 1.4rem;
@@ -93,7 +136,6 @@
       color: var(--text-dim);
     }
 
-    /* Konten Sub-Menu (Hidden by default) */
     .card-content {
       max-height: 0;
       opacity: 0;
@@ -103,69 +145,67 @@
       border-top: 1px solid transparent;
     }
 
-    .link-list {
-      list-style: none;
-      padding: 10px 0;
+    /* STATE TERBUKA */
+    .hub-card.open .card-content {
+      max-height: 70vh;
+      opacity: 1;
+      border-top-color: rgba(255, 255, 255, 0.05);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;   /* scroll mulus di iOS */
+      overscroll-behavior: contain;        /* cegah scroll halaman */
     }
 
-    /* Link Item */
-    .link-list a {
-      display: block;
-      padding: 12px 35px;
-      color: var(--text-dim);
-      text-decoration: none;
-      font-size: 0.9rem;
-      transition: all 0.2s ease;
-      border-left: 3px solid transparent;
-      transform-origin: left center;
-    }
-
-    /* === HOVER EFFECTS === */
-    
-    /* 1. Kartu Membesar & Glow */
     .hub-card:hover {
       transform: translateY(-5px) scale(1.02);
       background: var(--card-hover);
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px var(--accent-glow);
       border-color: rgba(255, 255, 255, 0.3);
-      border-radius: 25px 25px 40px 40px; /* Sedikit berubah bentuk saat terbuka */
+      border-radius: 25px 25px 40px 40px;
     }
 
-    .hub-card:hover .card-header::after {
-      transform: rotate(45deg); /* Plus jadi silang */
+    .hub-card.open .card-header::after {
+      transform: rotate(45deg);
       color: #fff;
     }
 
-    .hub-card:hover .card-content {
-      max-height: 500px; /* Ruang untuk link muncul */
-      opacity: 1;
-      border-top-color: rgba(255, 255, 255, 0.05);
+    .link-list {
+      list-style: none;
+      padding: 12px 0;
     }
 
-    /* 2. Link Animasi (Membesar & Bergeser) */
+    .link-list a {
+      display: block;
+      padding: 13px 35px;
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 1rem;                  /* lebih besar dari 0.9 */
+      transition: all 0.2s ease;
+      border-left: 3px solid transparent;
+    }
+
     .link-list a:hover {
       color: #fff;
       background: rgba(255, 255, 255, 0.08);
       transform: scale(1.05) translateX(10px);
-      border-left-color: #4facfe; /* Garis indikator biru */
-      padding-left: 30px; /* Kompensasi geser */
+      border-left-color: #4facfe;
+      padding-left: 30px;
     }
 
-    /* Warna Header Spesifik */
     .hub-card:nth-child(1) .card-header { color: #4facfe; }
     .hub-card:nth-child(2) .card-header { color: #ff6b6b; }
     .hub-card:nth-child(3) .card-header { color: #43e97b; }
     .hub-card:nth-child(4) .card-header { color: #ffd700; }
     .hub-card:nth-child(5) .card-header { color: #f093fb; }
 
-    /* Scrollbar Cantik */
-    .card-content::-webkit-scrollbar { width: 4px; }
-    .card-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+    .card-content::-webkit-scrollbar { width: 5px; }
+    .card-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.25); border-radius: 10px; }
 
-    /* Responsif HP */
+    /* RESPONSIVE EXTRA BOOST */
     @media (max-width: 600px) {
-      .hub-vertical { max-width: 100%; }
-      .hub-card:hover { transform: none; } /* Matikan efek 3D di HP */
+      body { padding: 20px 10px; }
+      .digital-clock { font-size: 1.2rem; padding: 8px 16px; }
+      .card-header { font-size: 1.25rem; padding: 16px 20px; }
+      .link-list a { font-size: 1.1rem; padding: 14px 30px; }
     }
   </style>
 </head>
@@ -173,16 +213,24 @@
 
   <canvas id="particle-canvas"></canvas>
 
-  <div class="hub-vertical">
-    
-    <!-- Header Judul -->
-    <div style="text-align: center; margin-bottom: 20px;">
-      <h2 style="font-weight: 800; letter-spacing: 1px; color: #fff; text-shadow: 0 0 20px rgba(100,200,255,0.4);">3D CENTRAL HUB</h2>
-      <p style="color: var(--text-dim); font-size: 0.8rem;">William Yaps Collection</p>
+  <!-- JAM & MARQUEE -->
+  <div class="clock-wrapper">
+    <div class="digital-clock" id="liveClock">Memuat...</div>
+    <div class="marquee">
+      <span id="marqueeText">??  3D CENTRAL HUB • William Yaps Collection • Jelajahi Semua Tools & Analisis</span>
     </div>
+  </div>
+
+  <!-- HEADER -->
+  <div style="text-align: center; margin-bottom: 10px;">
+    <h2 style="font-weight: 800; letter-spacing: 1px; color: #fff; text-shadow: 0 0 20px rgba(100,200,255,0.4); font-size: 1.8rem;">3D CENTRAL HUB</h2>
+    <p style="color: var(--text-dim); font-size: 0.9rem;">William Yaps Collection</p>
+  </div>
+
+  <div class="hub-vertical">
 
     <!-- 1. FOLDER AWAN -->
-    <div class="hub-card" data-sound="true">
+    <div class="hub-card">
       <div class="card-header"><span>?? Folder Awan</span></div>
       <div class="card-content">
         <ul class="link-list">
@@ -215,7 +263,7 @@
     </div>
 
     <!-- 2. WLM HTML -->
-    <div class="hub-card" data-sound="true">
+    <div class="hub-card">
       <div class="card-header"><span>?? WLM HTML</span></div>
       <div class="card-content">
         <ul class="link-list">
@@ -233,7 +281,7 @@
     </div>
 
     <!-- 3. SITES HUB -->
-    <div class="hub-card" data-sound="true">
+    <div class="hub-card">
       <div class="card-header"><span>?? Sites Hub</span></div>
       <div class="card-content">
         <ul class="link-list">
@@ -258,8 +306,8 @@
     </div>
 
     <!-- 4. ANALYSIS -->
-    <div class="hub-card" data-sound="true">
-      <div class="card-header"><span> Analysis</span></div>
+    <div class="hub-card">
+      <div class="card-header"><span>?? Analysis</span></div>
       <div class="card-content">
         <ul class="link-list">
           <li><a href="https://williamyaps.github.io/xiaoming/html/analis19771994.html">analis19771994.html</a></li>
@@ -282,76 +330,129 @@
     </div>
 
     <!-- 5. TOOLS -->
-    <div class="hub-card" data-sound="true">
+    <div class="hub-card">
       <div class="card-header"><span>?? Tools</span></div>
       <div class="card-content">
         <ul class="link-list">
-		<li><a href="https://wlmyaps.github.io/kurs/">Tabel kurs</a></li>
-        <li><a href="https://wlmyaps.github.io/kurs/graph.html">Grafik pergerakan</a></li>
-        <li><a href="https://wlmyaps.github.io/adblock/">Test Adblock</a></li>
-        <li><a href="https://wlmyaps.github.io/proxy/">Free web proxy</a></li>
-        <li><a href="https://wlmyaps.github.io/tv/">Free television</a></li>
-        <li><a href="https://williamyaps.blogspot.com/p/sitemap.html">Peta blog saya</a></li>
+          <li><a href="https://williamyaps.github.io/kurs/">Tabel kurs</a></li>
+          <li><a href="https://williamyaps.github.io/kurs/graph.html">Grafik pergerakan</a></li>
+          <li><a href="https://williamyaps.github.io/adblock/">Test Adblock</a></li>
+          <li><a href="https://williamyaps.github.io/proxy/">Free web proxy</a></li>
+          <li><a href="https://williamyaps.github.io/tv/">Free television</a></li>
+          <li><a href="https://williamyaps.blogspot.com/p/sitemap.html">Peta blog saya</a></li>
         </ul>
       </div>
     </div>
 
   </div>
 
-  <!-- Scripts -->
   <script>
-    /* === PARTICLES === */
+    /* ===== STARFIELD ===== */
     const canvas = document.getElementById('particle-canvas');
     const ctx = canvas.getContext('2d');
-    let particles = [];
+    let width, height;
+    let stars = [];
+    const STAR_COUNT = 120;
+    const colors = [
+      'rgba(0,210,255,',   // cyan
+      'rgba(180,77,255,',  // ungu
+      'rgba(255,255,255,', // putih
+      'rgba(241,196,15,',  // kuning
+      'rgba(46,204,113,',  // hijau
+    ];
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    class Particle {
-      constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 2;
-        this.speedX = (Math.random() * 0.5) - 0.25;
-        this.speedY = (Math.random() * 0.5) - 0.25;
-      }
-      update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-        if (this.x > canvas.width) this.x = 0;
-        if (this.x < 0) this.x = canvas.width;
-        if (this.y > canvas.height) this.y = 0;
-        if (this.y < 0) this.y = canvas.height;
-      }
-      draw() {
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-      }
+    function resizeCanvas() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
     }
-
-    function initParticles() {
-      for (let i = 0; i < 80; i++) particles.push(new Particle());
-    }
-    function animateParticles() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach(p => { p.update(); p.draw(); });
-      requestAnimationFrame(animateParticles);
-    }
-    initParticles();
-    animateParticles();
     window.addEventListener('resize', () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      particles = []; initParticles();
+      resizeCanvas();
+      stars = [];
+      for (let i = 0; i < STAR_COUNT; i++) stars.push(createStar());
     });
 
-    /* === AUDIO === */
+    function createStar() {
+      return {
+        x: Math.random() * width,
+        y: Math.random() * height,
+        radius: Math.random() * 2.5 + 0.5,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        speed: Math.random() * 0.3 + 0.05,
+        phase: Math.random() * Math.PI * 2,
+        twinkle: Math.random() * 0.02 + 0.005
+      };
+    }
+
+    function drawStars() {
+      ctx.clearRect(0, 0, width, height);
+      for (let s of stars) {
+        const alpha = 0.3 + 0.4 * Math.sin(Date.now() * s.twinkle + s.phase);
+        ctx.fillStyle = s.color + alpha + ')';
+        ctx.shadowColor = s.color + '0.8)';
+        ctx.shadowBlur = 6;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+        ctx.fill();
+        s.y -= s.speed;
+        if (s.y < -10) {
+          s.y = height + 10;
+          s.x = Math.random() * width;
+        }
+      }
+      requestAnimationFrame(drawStars);
+    }
+
+    resizeCanvas();
+    for (let i = 0; i < STAR_COUNT; i++) stars.push(createStar());
+    drawStars();
+
+    /* ===== DOUBLE-CLICK TOGGLE (MOBILE & DESKTOP) ===== */
+    const cardHeaders = document.querySelectorAll('.hub-card .card-header');
+    cardHeaders.forEach(header => {
+      let clickTimer = null;
+      header.addEventListener('click', (e) => {
+        if (clickTimer === null) {
+          clickTimer = setTimeout(() => {
+            clickTimer = null;
+            // single click do nothing
+          }, 300);
+        } else {
+          clearTimeout(clickTimer);
+          clickTimer = null;
+          // DOUBLE CLICK detected
+          const card = header.parentElement;
+          card.classList.toggle('open');
+          playBeep();
+        }
+      });
+    });
+
+    /* ===== DIGITAL CLOCK ===== */
+    function updateClock() {
+      const now = new Date();
+      const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+      const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+      const dayName = days[now.getDay()];
+      const date = now.getDate();
+      const month = months[now.getMonth()];
+      const year = now.getFullYear();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById('liveClock').innerHTML = 
+        `${dayName}, ${date} ${month} ${year} · <span class="time">${hours}:${minutes}:${seconds}</span>`;
+      // update marquee agar selalu fresh (opsional)
+      document.getElementById('marqueeText').innerHTML = 
+        `?? 3D CENTRAL HUB • ${dayName}, ${date} ${month} ${year} • William Yaps Collection • Jelajahi Semua Tools & Analisis`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    /* ===== BEEP AUDIO ===== */
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     const audioCtx = new AudioContext();
-    
     function playBeep() {
       if (audioCtx.state === 'suspended') audioCtx.resume();
       const osc = audioCtx.createOscillator();
@@ -366,11 +467,6 @@
       osc.start();
       osc.stop(audioCtx.currentTime + 0.1);
     }
-
-    document.querySelectorAll('.hub-card').forEach(card => {
-      card.addEventListener('mouseenter', playBeep);
-    });
   </script>
-
 </body>
 </html>
