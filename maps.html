@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>3D Central Hub - Vertical Edition</title>
+  <!-- Font Awesome untuk icon -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     :root {
       --bg-dark: #0f111a;
@@ -39,7 +41,6 @@
       pointer-events: none;
     }
 
-    /* === Jam & Marquee === */
     .clock-wrapper {
       width: 100%;
       max-width: 600px;
@@ -111,7 +112,7 @@
     .card-header {
       padding: 18px 25px;
       font-weight: 700;
-      font-size: 2.1rem;               /* sedikit lebih besar */
+      font-size: 1.2rem;               /* ukuran normal */
       letter-spacing: 0.5px;
       cursor: pointer;
       display: flex;
@@ -121,12 +122,18 @@
       z-index: 2;
       position: relative;
       user-select: none;
+      transition: background 0.2s;
+    }
+
+    .card-header i {
+      margin-right: 10px;
+      width: 24px;      /* biar rapi */
+      text-align: center;
     }
 
     .card-header span {
       display: flex;
       align-items: center;
-      gap: 10px;
     }
 
     .card-header::after {
@@ -134,6 +141,7 @@
       font-size: 1.4rem;
       transition: transform 0.3s ease;
       color: var(--text-dim);
+      font-family: monospace;
     }
 
     .card-content {
@@ -151,8 +159,8 @@
       opacity: 1;
       border-top-color: rgba(255, 255, 255, 0.05);
       overflow-y: auto;
-      -webkit-overflow-scrolling: touch;   /* scroll mulus di iOS */
-      overscroll-behavior: contain;        /* cegah scroll halaman */
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
     }
 
     .hub-card:hover {
@@ -178,7 +186,7 @@
       padding: 13px 35px;
       color: var(--text-dim);
       text-decoration: none;
-      font-size: 1rem;                  /* lebih besar dari 0.9 */
+      font-size: 1rem;
       transition: all 0.2s ease;
       border-left: 3px solid transparent;
     }
@@ -191,16 +199,21 @@
       padding-left: 30px;
     }
 
+    /* Warna ikon per card */
+    .hub-card:nth-child(1) .card-header i { color: #4facfe; }
     .hub-card:nth-child(1) .card-header { color: #4facfe; }
+    .hub-card:nth-child(2) .card-header i { color: #ff6b6b; }
     .hub-card:nth-child(2) .card-header { color: #ff6b6b; }
+    .hub-card:nth-child(3) .card-header i { color: #43e97b; }
     .hub-card:nth-child(3) .card-header { color: #43e97b; }
+    .hub-card:nth-child(4) .card-header i { color: #ffd700; }
     .hub-card:nth-child(4) .card-header { color: #ffd700; }
+    .hub-card:nth-child(5) .card-header i { color: #f093fb; }
     .hub-card:nth-child(5) .card-header { color: #f093fb; }
 
     .card-content::-webkit-scrollbar { width: 5px; }
     .card-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.25); border-radius: 10px; }
 
-    /* RESPONSIVE EXTRA BOOST */
     @media (max-width: 600px) {
       body { padding: 20px 10px; }
       .digital-clock { font-size: 1.2rem; padding: 8px 16px; }
@@ -217,7 +230,7 @@
   <div class="clock-wrapper">
     <div class="digital-clock" id="liveClock">Memuat...</div>
     <div class="marquee">
-      <span id="marqueeText">??  3D CENTRAL HUB • William Yaps Collection • Jelajahi Semua Tools & Analisis</span>
+      <span id="marqueeText">3D CENTRAL HUB • William Yaps Collection • Jelajahi Semua Tools & Analisis</span>
     </div>
   </div>
 
@@ -231,7 +244,7 @@
 
     <!-- 1. FOLDER AWAN -->
     <div class="hub-card">
-      <div class="card-header"><span>?? Folder Awan</span></div>
+      <div class="card-header"><span><i class="fas fa-folder"></i> Folder Awan</span></div>
       <div class="card-content">
         <ul class="link-list">
           <li><a href="https://williamyaps.github.io/wlmjavascript/awan/ayamvsbebek.html">ayamvsbebek.html</a></li>
@@ -264,7 +277,7 @@
 
     <!-- 2. WLM HTML -->
     <div class="hub-card">
-      <div class="card-header"><span>?? WLM HTML</span></div>
+      <div class="card-header"><span><i class="fas fa-book"></i> WLM HTML</span></div>
       <div class="card-content">
         <ul class="link-list">
           <li><a href="https://williamyaps.github.io/wlmjavascript/html/calculator.html">calculator.html</a></li>
@@ -282,7 +295,7 @@
 
     <!-- 3. SITES HUB -->
     <div class="hub-card">
-      <div class="card-header"><span>?? Sites Hub</span></div>
+      <div class="card-header"><span><i class="fas fa-globe"></i> Sites Hub</span></div>
       <div class="card-content">
         <ul class="link-list">
           <li><a href="https://williamyaps.github.io/xiaoming/sites/anjingvsharimau.html">anjingvsharimau.html</a></li>
@@ -307,7 +320,7 @@
 
     <!-- 4. ANALYSIS -->
     <div class="hub-card">
-      <div class="card-header"><span>?? Analysis</span></div>
+      <div class="card-header"><span><i class="fas fa-chart-bar"></i> Analysis</span></div>
       <div class="card-content">
         <ul class="link-list">
           <li><a href="https://williamyaps.github.io/xiaoming/html/analis19771994.html">analis19771994.html</a></li>
@@ -331,7 +344,7 @@
 
     <!-- 5. TOOLS -->
     <div class="hub-card">
-      <div class="card-header"><span>?? Tools</span></div>
+      <div class="card-header"><span><i class="fas fa-tools"></i> Tools</span></div>
       <div class="card-content">
         <ul class="link-list">
           <li><a href="https://williamyaps.github.io/kurs/">Tabel kurs</a></li>
@@ -354,11 +367,11 @@
     let stars = [];
     const STAR_COUNT = 120;
     const colors = [
-      'rgba(0,210,255,',   // cyan
-      'rgba(180,77,255,',  // ungu
-      'rgba(255,255,255,', // putih
-      'rgba(241,196,15,',  // kuning
-      'rgba(46,204,113,',  // hijau
+      'rgba(0,210,255,',
+      'rgba(180,77,255,',
+      'rgba(255,255,255,',
+      'rgba(241,196,15,',
+      'rgba(46,204,113,',
     ];
 
     function resizeCanvas() {
@@ -408,25 +421,36 @@
     for (let i = 0; i < STAR_COUNT; i++) stars.push(createStar());
     drawStars();
 
-    /* ===== DOUBLE-CLICK TOGGLE (MOBILE & DESKTOP) ===== */
+    /* ===== TOGGLE: DOUBLE-CLICK DI DESKTOP, SINGLE-CLICK DI HP ===== */
     const cardHeaders = document.querySelectorAll('.hub-card .card-header');
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
     cardHeaders.forEach(header => {
-      let clickTimer = null;
-      header.addEventListener('click', (e) => {
-        if (clickTimer === null) {
-          clickTimer = setTimeout(() => {
-            clickTimer = null;
-            // single click do nothing
-          }, 300);
-        } else {
-          clearTimeout(clickTimer);
-          clickTimer = null;
-          // DOUBLE CLICK detected
+      if (isTouchDevice) {
+        // Perangkat sentuh -> satu klik langsung toggle
+        header.addEventListener('click', (e) => {
           const card = header.parentElement;
           card.classList.toggle('open');
           playBeep();
-        }
-      });
+        });
+      } else {
+        // Desktop -> double-click
+        let clickTimer = null;
+        header.addEventListener('click', (e) => {
+          if (clickTimer === null) {
+            clickTimer = setTimeout(() => {
+              clickTimer = null;
+              // single click: do nothing
+            }, 300);
+          } else {
+            clearTimeout(clickTimer);
+            clickTimer = null;
+            const card = header.parentElement;
+            card.classList.toggle('open');
+            playBeep();
+          }
+        });
+      }
     });
 
     /* ===== DIGITAL CLOCK ===== */
@@ -443,9 +467,8 @@
       const seconds = String(now.getSeconds()).padStart(2, '0');
       document.getElementById('liveClock').innerHTML = 
         `${dayName}, ${date} ${month} ${year} · <span class="time">${hours}:${minutes}:${seconds}</span>`;
-      // update marquee agar selalu fresh (opsional)
       document.getElementById('marqueeText').innerHTML = 
-        `?? 3D CENTRAL HUB • ${dayName}, ${date} ${month} ${year} • William Yaps Collection • Jelajahi Semua Tools & Analisis`;
+        `3D CENTRAL HUB • ${dayName}, ${date} ${month} ${year} • William Yaps Collection • Jelajahi Semua Tools & Analisis`;
     }
     setInterval(updateClock, 1000);
     updateClock();
