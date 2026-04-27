@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Central Hub - Vertical Edition</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root {
+      --bg-dark: #0f111a;
+      --card-bg: rgba(30, 34, 50, 0.7);
+      --card-hover: rgba(40, 45, 70, 0.9);
+      --text-main: #e2e8f0;
+      --text-dim: #94a3b8;
+      --accent-glow: rgba(100, 200, 255, 0.5);
+      --border: rgba(255, 255, 255, 0.1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px 15px;
+      overflow-x: hidden;
+    }
+
+    #particle-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .clock-wrapper {
+      width: 100%;
+      max-width: 600px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .marquee {
+      overflow: hidden;
+      white-space: nowrap;
+      margin: 8px 0 15px;
+    }
+
+    .marquee span {
+      display: inline-block;
+      padding-left: 100%;
+      animation: scrollText 18s linear infinite;
+      color: #b0c4ff;
+      font-weight: 500;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    @keyframes scrollText {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(-100%, 0); }
+    }
+
+    .digital-clock {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #ffffff;
+      text-shadow: 0 0 15px rgba(100, 200, 255, 0.7);
+      margin-bottom: 10px;
+      padding: 10px 20px;
+      background: rgba(0, 0, 0, 0.35);
+      border-radius: 40px;
+      display: inline-block;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .digital-clock .time {
+      color: #4facfe;
+    }
+
+    .hub-vertical {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+      max-width: 600px;
+      perspective: 1000px;
+    }
+
+    .hub-card {
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      transform-style: preserve-3d;
+    }
+
+    /* === LEVEL UP: Glow saat card terbuka === */
+    .hub-card.open {
+      border-color: #4facfe;
+      box-shadow: 0 0 25px rgba(79, 172, 254, 0.4);
+    }
+
+    .card-header {
+      padding: 18px 25px;
+      font-weight: 700;
+      font-size: 1.2rem;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(90deg, rgba(255,255,255,0.05) 0%, transparent 100%);
+      z-index: 2;
+      position: relative;
+      user-select: none;
+      transition: background 0.2s;
+    }
+
+    /* === LEVEL UP: Efek klik/tap tekan === */
+    .card-header:active {
+      transform: scale(0.98);
+      transition: transform 0.1s;
+    }
+
+    .card-header i {
+      margin-right: 10px;
+      width: 24px;
+      text-align: center;
+    }
+
+    .card-header span {
+      display: flex;
+      align-items: center;
+    }
+
+    .card-header::after {
+      content: '+';
+      font-size: 1.4rem;
+      transition: transform 0.3s ease;
+      color: var(--text-dim);
+      font-family: monospace;
+    }
+
+    .card-content {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease, opacity 0.3s ease;
+      background: rgba(0, 0, 0, 0.2);
+      border-top: 1px solid transparent;
+    }
+
+    .hub-card.open .card-content {
+      max-height: 70vh;
+      opacity: 1;
+      border-top-color: rgba(255, 255, 255, 0.05);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+    }
+
+    .hub-card:hover {
+      transform: translateY(-5px) scale(1.02);
+      background: var(--card-hover);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px var(--accent-glow);
+      border-color: rgba(255, 255, 255, 0.3);
+      border-radius: 25px 25px 40px 40px;
+    }
+
+    .hub-card.open .card-header::after {
+      transform: rotate(45deg);
+      color: #fff;
+    }
+
+    .link-list {
+      list-style: none;
+      padding: 12px 0;
+    }
+
+    .link-list a {
+      display: block;
+      padding: 13px 35px;
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+      border-left: 3px solid transparent;
+    }
+
+    .link-list a:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.08);
+      transform: scale(1.05) translateX(10px);
+      border-left-color: #4facfe;
+      padding-left: 30px;
+    }
+
+    .hub-card:nth-child(1) .card-header i { color: #4facfe; }
+    .hub-card:nth-child(1) .card-header { color: #4facfe; }
+    .hub-card:nth-child(2) .card-header i { color: #ff6b6b; }
+    .hub-card:nth-child(2) .card-header { color: #ff6b6b; }
+    .hub-card:nth-child(3) .card-header i { color: #43e97b; }
+    .hub-card:nth-child(3) .card-header { color: #43e97b; }
+    .hub-card:nth-child(4) .card-header i { color: #ffd700; }
+    .hub-card:nth-child(4) .card-header { color: #ffd700; }
+    .hub-card:nth-child(5) .card-header i { color: #f093fb; }
+    .hub-card:nth-child(5) .card-header { color: #f093fb; }
+
+    .card-content::-webkit-scrollbar { width: 5px; }
+    .card-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.25); border-radius: 10px; }
+
+    @media (max-width: 600px) {
+      body { padding: 20px 10px; }
+      .digital-clock { font-size: 1.2rem; padding: 8px 16px; }
+      .card-header { font-size: 1.25rem; padding: 16px 20px; }
+      .link-list a { font-size: 1.1rem; padding: 14px 30px; }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="particle-canvas"></canvas>
+
+  <div class="clock-wrapper">
+    <div class="digital-clock" id="liveClock">Memuat...</div>
+    <div class="marquee">
+      <span id="marqueeText">3D CENTRAL HUB • William Yaps Collection • Jelajahi Semua Tools & Analisis</span>
+    </div>
+  </div>
+
+  <div style="text-align: center; margin-bottom: 10px;">
+    <h2 style="font-weight: 800; letter-spacing: 1px; color: #fff; text-shadow: 0 0 20px rgba(100,200,255,0.4); font-size: 1.8rem;">3D CENTRAL HUB</h2>
+    <p style="color: var(--text-dim); font-size: 0.9rem;">William Yaps Collection</p>
+  </div>
+
+  <div class="hub-vertical">
+
+    <!-- 1. FOLDER AWAN -->
+    <div class="hub-card">
+      <div class="card-header"><span><i class="fas fa-folder"></i> Folder Awan</span></div>
+      <div class="card-content">
+        <ul class="link-list">
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/ayamvsbebek.html">ayamvsbebek.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/bungabank.html">bungabank.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/bungabank2.html">bungabank2.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/bungabank3.html">bungabank3.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/bungabank4.html">bungabank4.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/compresspdf.html">compresspdf.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/compresspdfv2.html">compresspdfv2.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/compresspdfv3.html">compresspdfv3.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/dnsanalis.html">dnsanalis.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/hari1.html">hari1.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/hari2.html">hari2.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/hari3.html">hari3.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/hari4.html">hari4.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/index.html">index.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/newlist.html">newlist.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/nutrisi.html">nutrisi.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/nutrisi2.html">nutrisi2.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/tidur.html">tidur.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/imagetohd.html">imagetohd.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/imagetohdv2.html">imagetohdv2.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/imagetopdf.html">imagetopdf.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/pdftoimage.html">pdftoimage.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/upscaler.html">upscaler.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/zidankalkulator.html">zidankalkulator.html</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 2. WLM HTML -->
+    <div class="hub-card">
+      <div class="card-header"><span><i class="fas fa-book"></i> WLM HTML</span></div>
+      <div class="card-content">
+        <ul class="link-list">
+          <li><a href="https://williamyaps.github.io/wlmjavascript/html/calculator.html">calculator.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/html/filterlist.html">filterlist.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/html/kalku.html">kalku.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/html/kalkulator.html">kalkulator.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/html/sciences.html">sciences.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/html/sciences2.html">sciences2.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/html/sciences3.html">sciences3.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/html/sciences4.html">sciences4.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/html/sciences5.html">sciences5.html</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 3. SITES HUB -->
+    <div class="hub-card">
+      <div class="card-header"><span><i class="fas fa-globe"></i> Sites Hub</span></div>
+      <div class="card-content">
+        <ul class="link-list">
+          <li><a href="https://williamyaps.github.io/xiaoming/sites/anjingvsharimau.html">anjingvsharimau.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/sites/dnslevel.html">dnslevel.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/sites/dnslevelv2.html">dnslevelv2.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/sites/face.html">face.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/sites/face2.html">face2.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/sites/face3.html">face3.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/sites/face_refine_cpu.html">face_refine_cpu.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/sites/gpthpcompare.html">gpthpcompare.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/sites/hpcompare.html">hpcompare.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/sites/hpcomparison.html">hpcomparison.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/sites/kompor.html">kompor.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/sites/medansur.html">medansur.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/sites/ringkasancurl.html">ringkasancurl.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/sites/sinsur.html">sinsur.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/sites/tekniscurl.html">tekniscurl.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/sites/thankscopilot.html">thankscopilot.html</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 4. ANALYSIS -->
+    <div class="hub-card">
+      <div class="card-header"><span><i class="fas fa-chart-bar"></i> Analysis</span></div>
+      <div class="card-content">
+        <ul class="link-list">
+          <li><a href="https://williamyaps.github.io/xiaoming/html/analis19771994.html">analis19771994.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/html/analis19941999.html">analis19941999.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/html/analis199419992024.html">analis199419992024.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/html/antinyeri.html">antinyeri.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/html/emas101004.html">emas101004.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/html/gout.html">gout.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/html/gouttextasli.html">gouttextasli.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/html/kurscompare11Mar10April.html">kurscompare.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/html/mitokondria.html">mitokondria.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/html/mitokrondria-story.html">mitokondria story.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/html/mitrokondria-adv.html">mitokondria advance.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/html/nongout.html">nongout.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/html/scorpio.html">scorpio.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/html/visualscorpio.html">visualscorpio.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/html/tcm.html">tcm.html</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 5. TOOLS -->
+    <div class="hub-card">
+      <div class="card-header"><span><i class="fas fa-tools"></i> Tools</span></div>
+      <div class="card-content">
+        <ul class="link-list">
+          <li><a href="https://williamyaps.github.io/kurs/">Tabel kurs</a></li>
+          <li><a href="https://williamyaps.github.io/kurs/graph.html">Grafik pergerakan</a></li>
+          <li><a href="https://williamyaps.github.io/adblock/">Test Adblock</a></li>
+          <li><a href="https://williamyaps.github.io/proxy/">Free web proxy</a></li>
+          <li><a href="https://williamyaps.github.io/tv/">Free television</a></li>
+          <li><a href="https://williamyaps.blogspot.com/p/sitemap.html">Peta blog saya</a></li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    /* ===== STARFIELD ===== */
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let stars = [];
+    const STAR_COUNT = 120;
+    const colors = [
+      'rgba(0,210,255,',
+      'rgba(180,77,255,',
+      'rgba(255,255,255,',
+      'rgba(241,196,15,',
+      'rgba(46,204,113,',
+    ];
+
+    function resizeCanvas() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+    }
+    window.addEventListener('resize', () => {
+      resizeCanvas();
+      stars = [];
+      for (let i = 0; i < STAR_COUNT; i++) stars.push(createStar());
+    });
+
+    function createStar() {
+      return {
+        x: Math.random() * width,
+        y: Math.random() * height,
+        radius: Math.random() * 2.5 + 0.5,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        speed: Math.random() * 0.3 + 0.05,
+        phase: Math.random() * Math.PI * 2,
+        twinkle: Math.random() * 0.02 + 0.005
+      };
+    }
+
+    function drawStars() {
+      ctx.clearRect(0, 0, width, height);
+      for (let s of stars) {
+        const alpha = 0.3 + 0.4 * Math.sin(Date.now() * s.twinkle + s.phase);
+        ctx.fillStyle = s.color + alpha + ')';
+        ctx.shadowColor = s.color + '0.8)';
+        ctx.shadowBlur = 6;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+        ctx.fill();
+        s.y -= s.speed;
+        if (s.y < -10) {
+          s.y = height + 10;
+          s.x = Math.random() * width;
+        }
+      }
+      requestAnimationFrame(drawStars);
+    }
+
+    resizeCanvas();
+    for (let i = 0; i < STAR_COUNT; i++) stars.push(createStar());
+    drawStars();
+
+    /* ===== TOGGLE: DOUBLE-CLICK DI DESKTOP, SINGLE-CLICK DI HP ===== */
+    const cardHeaders = document.querySelectorAll('.hub-card .card-header');
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+    cardHeaders.forEach(header => {
+      if (isTouchDevice) {
+        header.addEventListener('click', (e) => {
+          const card = header.parentElement;
+          card.classList.toggle('open');
+          playBeep();
+        });
+      } else {
+        let clickTimer = null;
+        header.addEventListener('click', (e) => {
+          if (clickTimer === null) {
+            clickTimer = setTimeout(() => {
+              clickTimer = null;
+            }, 300);
+          } else {
+            clearTimeout(clickTimer);
+            clickTimer = null;
+            const card = header.parentElement;
+            card.classList.toggle('open');
+            playBeep();
+          }
+        });
+      }
+    });
+
+    /* ===== SHORTCUT KEYBOARD 1-5 ===== */
+    document.addEventListener('keydown', (e) => {
+      if (e.key >= '1' && e.key <= '5') {
+        const cards = document.querySelectorAll('.hub-card');
+        const card = cards[e.key - 1];
+        if (card) {
+          card.classList.toggle('open');
+          playBeep();
+        }
+      }
+    });
+
+    /* ===== DIGITAL CLOCK ===== */
+    function updateClock() {
+      const now = new Date();
+      const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+      const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+      const dayName = days[now.getDay()];
+      const date = now.getDate();
+      const month = months[now.getMonth()];
+      const year = now.getFullYear();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById('liveClock').innerHTML = 
+        `${dayName}, ${date} ${month} ${year} · <span class="time">${hours}:${minutes}:${seconds}</span>`;
+      document.getElementById('marqueeText').innerHTML = 
+        `3D CENTRAL HUB • ${dayName}, ${date} ${month} ${year} • William Yaps Collection • Jelajahi Semua Tools & Analisis`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    /* ===== BEEP AUDIO ===== */
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    const audioCtx = new AudioContext();
+    function playBeep() {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.1);
+      gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.1);
+    }
+  </script>
+</body>
+</html>
