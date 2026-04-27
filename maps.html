@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Central Hub - Vertical Edition</title>
+  <style>
+    :root {
+      --bg-dark: #0f111a;
+      --card-bg: rgba(30, 34, 50, 0.7);
+      --card-hover: rgba(40, 45, 70, 0.9);
+      --text-main: #e2e8f0;
+      --text-dim: #94a3b8;
+      --accent-glow: rgba(100, 200, 255, 0.5);
+      --border: rgba(255, 255, 255, 0.1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      overflow-x: hidden;
+    }
+
+    /* Canvas Background */
+    #particle-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* Container Vertikal */
+    .hub-vertical {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+      max-width: 600px; /* Lebar seperti menu di gambar */
+      perspective: 1000px;
+    }
+
+    /* Style Kartu (Pill) */
+    .hub-card {
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 50px; /* Bentuk Pill */
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      transform-style: preserve-3d;
+    }
+
+    /* Header Tombol */
+    .card-header {
+      padding: 18px 25px;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(90deg, rgba(255,255,255,0.05) 0%, transparent 100%);
+      z-index: 2;
+      position: relative;
+    }
+
+    .card-header span {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Arrow Icon */
+    .card-header::after {
+      content: '+';
+      font-size: 1.4rem;
+      transition: transform 0.3s ease;
+      color: var(--text-dim);
+    }
+
+    /* Konten Sub-Menu (Hidden by default) */
+    .card-content {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease, opacity 0.3s ease;
+      background: rgba(0, 0, 0, 0.2);
+      border-top: 1px solid transparent;
+    }
+
+    .link-list {
+      list-style: none;
+      padding: 10px 0;
+    }
+
+    /* Link Item */
+    .link-list a {
+      display: block;
+      padding: 12px 35px;
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+      border-left: 3px solid transparent;
+      transform-origin: left center;
+    }
+
+    /* === HOVER EFFECTS === */
+    
+    /* 1. Kartu Membesar & Glow */
+    .hub-card:hover {
+      transform: translateY(-5px) scale(1.02);
+      background: var(--card-hover);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px var(--accent-glow);
+      border-color: rgba(255, 255, 255, 0.3);
+      border-radius: 25px 25px 40px 40px; /* Sedikit berubah bentuk saat terbuka */
+    }
+
+    .hub-card:hover .card-header::after {
+      transform: rotate(45deg); /* Plus jadi silang */
+      color: #fff;
+    }
+
+    .hub-card:hover .card-content {
+      max-height: 500px; /* Ruang untuk link muncul */
+      opacity: 1;
+      border-top-color: rgba(255, 255, 255, 0.05);
+    }
+
+    /* 2. Link Animasi (Membesar & Bergeser) */
+    .link-list a:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.08);
+      transform: scale(1.05) translateX(10px);
+      border-left-color: #4facfe; /* Garis indikator biru */
+      padding-left: 30px; /* Kompensasi geser */
+    }
+
+    /* Warna Header Spesifik */
+    .hub-card:nth-child(1) .card-header { color: #4facfe; }
+    .hub-card:nth-child(2) .card-header { color: #ff6b6b; }
+    .hub-card:nth-child(3) .card-header { color: #43e97b; }
+    .hub-card:nth-child(4) .card-header { color: #ffd700; }
+    .hub-card:nth-child(5) .card-header { color: #f093fb; }
+
+    /* Scrollbar Cantik */
+    .card-content::-webkit-scrollbar { width: 4px; }
+    .card-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+
+    /* Responsif HP */
+    @media (max-width: 600px) {
+      .hub-vertical { max-width: 100%; }
+      .hub-card:hover { transform: none; } /* Matikan efek 3D di HP */
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="particle-canvas"></canvas>
+
+  <div class="hub-vertical">
+    
+    <!-- Header Judul -->
+    <div style="text-align: center; margin-bottom: 20px;">
+      <h2 style="font-weight: 800; letter-spacing: 1px; color: #fff; text-shadow: 0 0 20px rgba(100,200,255,0.4);">3D CENTRAL HUB</h2>
+      <p style="color: var(--text-dim); font-size: 0.8rem;">William Yaps Collection</p>
+    </div>
+
+    <!-- 1. FOLDER AWAN -->
+    <div class="hub-card" data-sound="true">
+      <div class="card-header"><span>?? Folder Awan</span></div>
+      <div class="card-content">
+        <ul class="link-list">
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/ayamvsbebek.html">ayamvsbebek.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/bungabank.html">bungabank.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/bungabank2.html">bungabank2.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/bungabank3.html">bungabank3.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/bungabank4.html">bungabank4.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/compresspdf.html">compresspdf.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/compresspdfv2.html">compresspdfv2.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/compresspdfv3.html">compresspdfv3.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/dnsanalis.html">dnsanalis.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/hari1.html">hari1.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/hari2.html">hari2.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/hari3.html">hari3.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/hari4.html">hari4.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/index.html">index.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/newlist.html">newlist.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/nutrisi.html">nutrisi.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/nutrisi2.html">nutrisi2.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/tidur.html">tidur.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/imagetohd.html">imagetohd.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/imagetohdv2.html">imagetohdv2.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/imagetopdf.html">imagetopdf.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/pdftoimage.html">pdftoimage.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/upscaler.html">upscaler.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/zidankalkulator.html">zidankalkulator.html</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 2. WLM HTML -->
+    <div class="hub-card" data-sound="true">
+      <div class="card-header"><span>?? WLM HTML</span></div>
+      <div class="card-content">
+        <ul class="link-list">
+          <li><a href="https://williamyaps.github.io/wlmjavascript/html/calculator.html">calculator.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/html/filterlist.html">filterlist.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/html/kalku.html">kalku.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/html/kalkulator.html">kalkulator.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/html/sciences.html">sciences.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/html/sciences2.html">sciences2.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/html/sciences3.html">sciences3.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/html/sciences4.html">sciences4.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/html/sciences5.html">sciences5.html</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 3. SITES HUB -->
+    <div class="hub-card" data-sound="true">
+      <div class="card-header"><span>?? Sites Hub</span></div>
+      <div class="card-content">
+        <ul class="link-list">
+          <li><a href="https://williamyaps.github.io/xiaoming/sites/anjingvsharimau.html">anjingvsharimau.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/sites/dnslevel.html">dnslevel.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/sites/dnslevelv2.html">dnslevelv2.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/sites/face.html">face.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/sites/face2.html">face2.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/sites/face3.html">face3.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/sites/face_refine_cpu.html">face_refine_cpu.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/sites/gpthpcompare.html">gpthpcompare.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/sites/hpcompare.html">hpcompare.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/sites/hpcomparison.html">hpcomparison.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/sites/kompor.html">kompor.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/sites/medansur.html">medansur.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/sites/ringkasancurl.html">ringkasancurl.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/sites/sinsur.html">sinsur.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/sites/tekniscurl.html">tekniscurl.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/sites/thankscopilot.html">thankscopilot.html</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 4. ANALYSIS -->
+    <div class="hub-card" data-sound="true">
+      <div class="card-header"><span> Analysis</span></div>
+      <div class="card-content">
+        <ul class="link-list">
+          <li><a href="https://williamyaps.github.io/xiaoming/html/analis19771994.html">analis19771994.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/html/analis19941999.html">analis19941999.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/html/analis199419992024.html">analis199419992024.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/html/antinyeri.html">antinyeri.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/html/emas101004.html">emas101004.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/html/gout.html">gout.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/html/gouttextasli.html">gouttextasli.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/html/kurscompare11Mar10April.html">kurscompare.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/html/mitokondria.html">mitokondria.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/html/mitokrondria-story.html">mitokondria story.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/html/mitrokondria-adv.html">mitokondria advance.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/html/nongout.html">nongout.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/html/scorpio.html">scorpio.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/html/visualscorpio.html">visualscorpio.html</a></li>
+          <li><a href="https://williamyaps.github.io/xiaoming/html/tcm.html">tcm.html</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 5. TOOLS -->
+    <div class="hub-card" data-sound="true">
+      <div class="card-header"><span>?? Tools</span></div>
+      <div class="card-content">
+        <ul class="link-list">
+		<li><a href="https://wlmyaps.github.io/kurs/">Tabel kurs</a></li>
+        <li><a href="https://wlmyaps.github.io/kurs/graph.html">Grafik pergerakan</a></li>
+        <li><a href="https://wlmyaps.github.io/adblock/">Test Adblock</a></li>
+        <li><a href="https://wlmyaps.github.io/proxy/">Free web proxy</a></li>
+        <li><a href="https://wlmyaps.github.io/tv/">Free television</a></li>
+        <li><a href="https://williamyaps.blogspot.com/p/sitemap.html">Peta blog saya</a></li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    /* === PARTICLES === */
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2;
+        this.speedX = (Math.random() * 0.5) - 0.25;
+        this.speedY = (Math.random() * 0.5) - 0.25;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.x > canvas.width) this.x = 0;
+        if (this.x < 0) this.x = canvas.width;
+        if (this.y > canvas.height) this.y = 0;
+        if (this.y < 0) this.y = canvas.height;
+      }
+      draw() {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function initParticles() {
+      for (let i = 0; i < 80; i++) particles.push(new Particle());
+    }
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => { p.update(); p.draw(); });
+      requestAnimationFrame(animateParticles);
+    }
+    initParticles();
+    animateParticles();
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      particles = []; initParticles();
+    });
+
+    /* === AUDIO === */
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    const audioCtx = new AudioContext();
+    
+    function playBeep() {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.1);
+      gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.1);
+    }
+
+    document.querySelectorAll('.hub-card').forEach(card => {
+      card.addEventListener('mouseenter', playBeep);
+    });
+  </script>
+
+</body>
+</html>
