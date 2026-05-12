@@ -1,25 +1,868 @@
-<html><body>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Central Hub - Vertical Edition</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+  <style>
+    :root {
+      --bg-dark: #0f111a;
+      --card-bg: rgba(30, 34, 50, 0.7);
+      --card-hover: rgba(40, 45, 70, 0.9);
+      --text-main: #e2e8f0;
+      --text-dim: #94a3b8;
+      --accent-glow: rgba(100, 200, 255, 0.5);
+      --border: rgba(255, 255, 255, 0.1);
+    }
 
-<!-- Begin Vista-Buttons.com -->
-<link href="menu-files/styles_2m1i2.css" type="text/css" rel="stylesheet"/>
-<ul id="vbUL_om1i2" class="vbUL2m1i2" style="visibility:hidden;">
-<li><a href="https://williamyaps.github.io/downloadyoutube/getting-started.html" title="How to use" target="_parent">How&nbsp;to&nbsp;use</a>
-<ul id="vbUL_zm1i2" class="vbUL2m1i2">
-<li><a href="https://williamyaps.github.io/downloadyoutube/examples.html" title="Examples" target="_parent">Examples</a></li>
-<li><a href="https://williamyaps.github.io/downloadyoutube/videos.html" title="Videos">Videos</a></li></ul></li>
-<li><a href="https://williamyaps.github.io/downloadyoutube/documentation/index.html" title="Website support" target="_parent">Website&nbsp;support</a></li>
-<li><a href="https://williamyaps.github.io/downloadyoutube/faq.html" title="Download" target="_parent">Download</a></li></ul>
-<ul id="vbUL_4m1i2" class="vbUL2m1i2" style="visibility:hidden;">
-<li><a href="https://www.facebook.com/williamyaps" title="Facebook" target="_blank">Facebook</a></li>
-<li><a href="https://www.instagram.com/williamyaps/" title="Instagram" target="_blank">Instagram</a></li></ul>
-<script type="text/javascript" src="menu-files/sc2m1i2.js"></script>
-<table id="vista-buttons.com:id2m1i2" width=0 cellpadding=0 cellspacing=0 border=0><tr><td style="padding-right:0px" title ="Home ">
-<a href="https://williamyaps.github.io/downloadyoutube/" target="_blank" onMouseOver='xpe("2m1i2o");' onMouseOut='xpe("2m1i2n");' onMouseDown='xpe("2m1i2c");'><img id="xpi_2m1i2" src="menu-files/bt2m1i2_0.gif" name=vb2m1i2 width="115" height="26" border=0 alt="Home "></a></td><td style="padding-right:0px" title ="My Blog">
-<a href="https://williamyaps.blogspot.com" target="_blank" onMouseOver='xpe("tm1i2o");' onMouseOut='xpe("tm1i2n");' onMouseDown='xpe("tm1i2c");'><img id="xpi_tm1i2" src="menu-files/bttm1i2_0.gif" name=vbtm1i2 width="115" height="26" border=0 alt="My Blog"></a></td><td style="padding-right:0px" title ="My Old Website">
-<a href="http://williamyaps.webs.com/" target="_blank" onMouseOver='xpe("pm1i2o");' onMouseOut='xpe("pm1i2n");' onMouseDown='xpe("pm1i2c");'><img id="xpi_pm1i2" src="menu-files/btpm1i2_0.gif" name=vbpm1i2 width="115" height="26" border=0 alt="My Old Website"></a></td><td style="padding-right:0px" title ="Downloader">
-<a target="_parent" onMouseOver='xpe("om1i2o");xpshow("om1i2",0,this);xpsmover(this);' onMouseOut='xpsmout(this);' onMouseDown='xpe("om1i2c");'><img id="xpi_om1i2" src="menu-files/btom1i2_0.gif" name=vbom1i2 width="115" height="26" border=0 alt="Downloader"></a></td><td style="padding-right:0px" title ="Adblock">
-<a href="https://wlmyaps.github.io/priskila/data/adblock.html" target="_blank" onMouseOver='xpe("wm1i2o");' onMouseOut='xpe("wm1i2n");' onMouseDown='xpe("wm1i2c");'><img id="xpi_wm1i2" src="menu-files/btwm1i2_0.gif" name=vbwm1i2 width="115" height="26" border=0 alt="Adblock"></a></td><td style="padding-right:0px" title ="Social Media">
-<a target="_parent" onMouseOver='xpe("4m1i2o");xpshow("4m1i2",0,this);xpsmover(this);' onMouseOut='xpsmout(this);' onMouseDown='xpe("4m1i2c");'><img id="xpi_4m1i2" src="menu-files/bt4m1i2_0.gif" name=vb4m1i2 width="115" height="26" border=0 alt="Social Media"></a></td></tr></table>
-<noscript><a href="http://vista-buttons.com">Web Page Button by Vista-Buttons.com v2.27</a></noscript>
-<!-- End Vista-Buttons.com -->
-</body></html>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px 15px;
+      overflow-x: hidden;
+    }
+
+    /* Background upgraded to Mesh Gradient */
+
+    /* ===== ANIMATED MESH GRADIENT BACKGROUND ===== */
+    .mesh-bg {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -2;
+      background:
+        radial-gradient(at 20% 20%, rgba(76, 201, 240, 0.25) 0px, transparent 50%),
+        radial-gradient(at 80% 10%, rgba(181, 23, 158, 0.2) 0px, transparent 50%),
+        radial-gradient(at 90% 80%, rgba(67, 97, 238, 0.2) 0px, transparent 50%),
+        radial-gradient(at 10% 90%, rgba(63, 55, 201, 0.25) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, rgba(0, 210, 255, 0.08) 0px, transparent 60%);
+      background-size: 200% 200%;
+      animation: meshMove 18s ease infinite;
+      filter: blur(40px);
+    }
+    @keyframes meshMove {
+      0% { background-position: 0% 50%; }
+      25% { background-position: 50% 100%; }
+      50% { background-position: 100% 50%; }
+      75% { background-position: 50% 0%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* ===== FLOATING ORBS (Bubbles) ===== */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      z-index: -1;
+      opacity: 0.35;
+      pointer-events: none;
+    }
+    .orb-1 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(0,210,255,0.6) 0%, transparent 70%);
+      top: -100px; left: -100px;
+      animation: floatOrb1 20s ease-in-out infinite;
+    }
+    .orb-2 {
+      width: 350px; height: 350px;
+      background: radial-gradient(circle, rgba(181,23,158,0.5) 0%, transparent 70%);
+      bottom: -80px; right: -80px;
+      animation: floatOrb2 25s ease-in-out infinite;
+    }
+    .orb-3 {
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(67,97,238,0.5) 0%, transparent 70%);
+      top: 40%; right: 10%;
+      animation: floatOrb3 22s ease-in-out infinite;
+    }
+    .orb-4 {
+      width: 250px; height: 250px;
+      background: radial-gradient(circle, rgba(76,201,240,0.4) 0%, transparent 70%);
+      bottom: 20%; left: 5%;
+      animation: floatOrb4 28s ease-in-out infinite;
+    }
+    @keyframes floatOrb1 {
+      0%,100% { transform: translate(0,0) scale(1); }
+      33% { transform: translate(60px,40px) scale(1.1); }
+      66% { transform: translate(30px,80px) scale(0.95); }
+    }
+    @keyframes floatOrb2 {
+      0%,100% { transform: translate(0,0) scale(1); }
+      33% { transform: translate(-50px,-30px) scale(1.15); }
+      66% { transform: translate(-80px,20px) scale(0.9); }
+    }
+    @keyframes floatOrb3 {
+      0%,100% { transform: translate(0,0) scale(1); }
+      50% { transform: translate(-40px,60px) scale(1.1); }
+    }
+    @keyframes floatOrb4 {
+      0%,100% { transform: translate(0,0) scale(1); }
+      50% { transform: translate(50px,-40px) scale(1.05); }
+    }
+
+    /* ===== GLASSMORPHISM MEWAH ===== */
+    .hub-card {
+      background: linear-gradient(135deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.02) 100%) !important;
+      backdrop-filter: blur(25px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(25px) saturate(180%) !important;
+      border: 1px solid rgba(255,255,255,0.18) !important;
+      box-shadow:
+        0 8px 32px 0 rgba(0, 0, 0, 0.45),
+        inset 0 0 0 1px rgba(255,255,255,0.08),
+        0 0 25px rgba(79, 172, 254, 0.12) !important;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+    .hub-card:hover {
+      box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.6),
+        0 0 40px rgba(79, 172, 254, 0.25),
+        inset 0 0 0 1px rgba(255,255,255,0.15) !important;
+      border-color: rgba(100, 200, 255, 0.4) !important;
+    }
+    .hub-card.open {
+      border-color: rgba(79, 172, 254, 0.6) !important;
+      box-shadow:
+        0 0 35px rgba(79, 172, 254, 0.3),
+        0 8px 32px 0 rgba(0, 0, 0, 0.5) !important;
+    }
+
+    /* ===== JAM 3D FLOATING + BREATHING ===== */
+    .digital-clock {
+      transform-style: preserve-3d;
+      animation: breathe 4s ease-in-out infinite;
+      box-shadow:
+        0 25px 60px -10px rgba(0, 0, 0, 0.8),
+        0 0 40px rgba(79, 172, 254, 0.25),
+        inset 0 0 0 1px rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      text-shadow:
+        0 0 20px rgba(100, 200, 255, 0.8),
+        0 0 40px rgba(100, 200, 255, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+    .digital-clock::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.08) 50%, transparent 70%);
+      animation: sheen 6s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes breathe {
+      0%, 100% { transform: translateY(0) translateZ(0px) rotateX(0deg); }
+      50% { transform: translateY(-12px) translateZ(35px) rotateX(3deg); }
+    }
+    @keyframes sheen {
+      0% { transform: translateX(-100%) rotate(0deg); }
+      100% { transform: translateX(100%) rotate(0deg); }
+    }
+
+    .clock-wrapper {
+      width: 100%;
+      max-width: 600px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .marquee {
+      overflow: hidden;
+      white-space: nowrap;
+      margin: 8px 0 15px;
+    }
+
+    .marquee span {
+      display: inline-block;
+      padding-left: 100%;
+      animation: scrollText 18s linear infinite;
+      color: #b0c4ff;
+      font-weight: 500;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    @keyframes scrollText {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(-100%, 0); }
+    }
+
+    .digital-clock {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #ffffff;
+      text-shadow: 0 0 15px rgba(100, 200, 255, 0.7);
+      margin-bottom: 10px;
+      padding: 10px 20px;
+      background: rgba(0, 0, 0, 0.35);
+      border-radius: 40px;
+      display: inline-block;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .digital-clock .time {
+      color: #4facfe;
+    }
+
+    /* === SEARCH BOX (Revisi) === */
+    .search-wrapper {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto 15px;
+      position: relative;
+    }
+
+    .search-box {
+      width: 100%;
+      padding: 14px 45px 14px 20px;
+      border-radius: 50px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(0,0,0,0.4);
+      color: #fff;
+      font-size: 1rem;
+      outline: none;
+      transition: 0.3s;
+      backdrop-filter: blur(10px);
+    }
+
+    .search-box:focus {
+      border-color: #4facfe;
+      box-shadow: 0 0 20px rgba(79, 172, 254, 0.3);
+    }
+
+    .search-box::placeholder {
+      color: #94a3b8;
+    }
+
+    .clear-search {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 5px;
+      line-height: 1;
+      transition: color 0.2s;
+      display: none;
+    }
+
+    .clear-search:hover {
+      color: #fff;
+    }
+
+    .not-found-msg {
+      text-align: center;
+      color: #ff6b6b;
+      margin: 10px 0;
+      font-weight: 500;
+      display: none;
+    }
+
+    .hub-vertical {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+      max-width: 600px;
+      perspective: 1000px;
+    }
+
+    /* === ANIMASI CARD REVISI === */
+    .hub-card {
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease, transform 0.3s ease;
+      position: relative;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      transform-style: preserve-3d;
+      pointer-events: auto;
+    }
+
+    .hub-card.open {
+      border-color: #4facfe;
+      box-shadow: 0 0 25px rgba(79, 172, 254, 0.4);
+    }
+
+    /* Sembunyikan & animasi */
+    .hub-card.hidden-by-search {
+      opacity: 0;
+      transform: scale(0.9) translateY(20px);
+      pointer-events: none;
+      position: absolute;
+      z-index: -1;
+      border-color: transparent;
+      box-shadow: none;
+    }
+
+    .card-header {
+      padding: 18px 25px;
+      font-weight: 700;
+      font-size: 1.2rem;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(90deg, rgba(255,255,255,0.05) 0%, transparent 100%);
+      z-index: 2;
+      position: relative;
+      user-select: none;
+      transition: background 0.2s;
+    }
+
+    .card-header:active {
+      transform: scale(0.98);
+      transition: transform 0.1s;
+    }
+
+    .card-header i {
+      margin-right: 10px;
+      width: 24px;
+      text-align: center;
+    }
+
+    .card-header span {
+      display: flex;
+      align-items: center;
+    }
+
+    .card-header::after {
+      content: '+';
+      font-size: 1.4rem;
+      transition: transform 0.3s ease;
+      color: var(--text-dim);
+      font-family: monospace;
+    }
+
+    .card-content {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease, opacity 0.3s ease;
+      background: rgba(0, 0, 0, 0.2);
+      border-top: 1px solid transparent;
+    }
+
+    .hub-card.open .card-content {
+      max-height: 70vh;
+      opacity: 1;
+      border-top-color: rgba(255, 255, 255, 0.05);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+    }
+
+    .hub-card:hover {
+      transform: translateY(-5px) scale(1.02);
+      background: var(--card-hover);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px var(--accent-glow);
+      border-color: rgba(255, 255, 255, 0.3);
+      border-radius: 25px 25px 40px 40px;
+    }
+
+    .hub-card.open .card-header::after {
+      transform: rotate(45deg);
+      color: #fff;
+    }
+
+    .link-list {
+      list-style: none;
+      padding: 12px 0;
+    }
+
+    .link-list li {
+      transition: 0.2s;
+    }
+
+    .link-list li.hidden-link {
+      display: none !important;
+    }
+
+    .link-list a {
+      display: block;
+      padding: 13px 35px;
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+      border-left: 3px solid transparent;
+    }
+
+    .link-list a:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.08);
+      transform: scale(1.05) translateX(10px);
+      border-left-color: #4facfe;
+      padding-left: 30px;
+    }
+
+    .link-list a mark {
+      background: rgba(79, 172, 254, 0.3);
+      color: #fff;
+      padding: 0 2px;
+      border-radius: 4px;
+    }
+
+    .hub-card:nth-child(1) .card-header i { color: #4facfe; }
+    .hub-card:nth-child(1) .card-header { color: #4facfe; }
+    .hub-card:nth-child(2) .card-header i { color: #ff6b6b; }
+    .hub-card:nth-child(2) .card-header { color: #ff6b6b; }
+    .hub-card:nth-child(3) .card-header i { color: #43e97b; }
+    .hub-card:nth-child(3) .card-header { color: #43e97b; }
+    .hub-card:nth-child(4) .card-header i { color: #ffd700; }
+    .hub-card:nth-child(4) .card-header { color: #ffd700; }
+    .hub-card:nth-child(5) .card-header i { color: #f093fb; }
+    .hub-card:nth-child(5) .card-header { color: #f093fb; }
+    .hub-card:nth-child(6) .card-header i { color: #ff9f43; }
+    .hub-card:nth-child(6) .card-header { color: #ff9f43; }
+
+    .card-content::-webkit-scrollbar { width: 5px; }
+    .card-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.25); border-radius: 10px; }
+
+    @media (max-width: 600px) {
+      body { padding: 20px 10px; }
+      .digital-clock { font-size: 1.2rem; padding: 8px 16px; }
+      .card-header { font-size: 1.25rem; padding: 16px 20px; }
+      .link-list a { font-size: 1.1rem; padding: 14px 30px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Animated Mesh Gradient Background -->
+<div class="mesh-bg"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+<div class="orb orb-4"></div>
+
+  <div class="clock-wrapper">
+    <div class="digital-clock" id="liveClock">Memuat...</div>
+    <div class="marquee">
+      <span id="marqueeText">3D CENTRAL HUB • William Yaps Collection • Jelajahi Semua Tools & Analisis</span>
+    </div>
+  </div>
+
+  <div style="text-align: center; margin-bottom: 10px;">
+    <h2 style="font-weight: 800; letter-spacing: 1px; color: #fff; text-shadow: 0 0 20px rgba(100,200,255,0.4); font-size: 1.8rem;">3D CENTRAL HUB</h2>
+    <p style="color: var(--text-dim); font-size: 0.9rem;">William Yaps Collection</p>
+  </div>
+
+  <!-- SEARCH BOX + CLEAR BUTTON -->
+  <div class="search-wrapper">
+    <input type="text" class="search-box" id="searchInput" placeholder="Cari menu atau link...">
+    <button class="clear-search" id="clearSearchBtn" title="Hapus pencarian">&times;</button>
+  </div>
+  <div class="not-found-msg" id="notFoundMsg">Tidak ditemukan dalam menu William Yaps, coba kata kunci lain.</div>
+
+  <div class="hub-vertical">
+
+    <!-- 1. FOLDER AWAN -->
+    <div class="hub-card">
+      <div class="card-header"><span><i class="fas fa-folder"></i> Folder Awan</span></div>
+      <div class="card-content">
+        <ul class="link-list">
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/ayamvsbebek.html" target="_blank" rel="noopener noreferrer">ayamvsbebek.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/bungabank.html" target="_blank" rel="noopener noreferrer">bungabank.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/bungabank2.html" target="_blank" rel="noopener noreferrer">bungabank2.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/bungabank3.html" target="_blank" rel="noopener noreferrer">bungabank3.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/bungabank4.html" target="_blank" rel="noopener noreferrer">bungabank4.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/compresspdf.html" target="_blank" rel="noopener noreferrer">compresspdf.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/compresspdfv2.html" target="_blank" rel="noopener noreferrer">compresspdfv2.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/compresspdfv3.html" target="_blank" rel="noopener noreferrer">compresspdfv3.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/dnsanalis.html" target="_blank" rel="noopener noreferrer">dnsanalis.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/hari1.html" target="_blank" rel="noopener noreferrer">hari1.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/hari2.html" target="_blank" rel="noopener noreferrer">hari2.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/hari3.html" target="_blank" rel="noopener noreferrer">hari3.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/hari4.html" target="_blank" rel="noopener noreferrer">hari4.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/index.html" target="_blank" rel="noopener noreferrer">index.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/newlist.html" target="_blank" rel="noopener noreferrer">newlist.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/nutrisi.html" target="_blank" rel="noopener noreferrer">nutrisi.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/nutrisi2.html" target="_blank" rel="noopener noreferrer">nutrisi2.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/tidur.html" target="_blank" rel="noopener noreferrer">tidur.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/imagetohd.html" target="_blank" rel="noopener noreferrer">imagetohd.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/imagetohdv2.html" target="_blank" rel="noopener noreferrer">imagetohdv2.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/imagetopdf.html" target="_blank" rel="noopener noreferrer">imagetopdf.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/pdftoimage.html" target="_blank" rel="noopener noreferrer">pdftoimage.html</a></li>
+		  <li><a href="https://wlmyaps.github.io/tools/imagetopdf.html" target="_blank" rel="noopener noreferrer">IMAGE to PDF.html</a></li>
+		  <li><a href="https://wlmyaps.github.io/pdf/pdftotext.html" target="_blank" rel="noopener noreferrer">PDF to image.html</a></li>
+		  <li><a href="https://wlmyaps.github.io/pdf/ocrpdfv1.html" target="_blank" rel="noopener noreferrer">PDF Gambar ke teks1</a></li>
+		  <li><a href="https://wlmyaps.github.io/pdf/ocrpdfv2.html" target="_blank" rel="noopener noreferrer">PDF Gambar ke teks2</a></li>
+		  <li><a href="https://wlmyaps.github.io/pdf/ocrpdfv3.html" target="_blank" rel="noopener noreferrer">PDF Gambar ke teks3</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/upscaler.html" target="_blank" rel="noopener noreferrer">upscaler.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/awan/zidankalkulator.html" target="_blank" rel="noopener noreferrer">zidankalkulator.html</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 2. WLM HTML -->
+    <div class="hub-card">
+      <div class="card-header"><span><i class="fas fa-book"></i> WLM HTML</span></div>
+      <div class="card-content">
+        <ul class="link-list">
+          <li><a href="https://williamyaps.github.io/wlmjavascript/html/calculator.html" target="_blank" rel="noopener noreferrer">calculator.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/html/filterlist.html" target="_blank" rel="noopener noreferrer">filterlist.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/html/kalku.html" target="_blank" rel="noopener noreferrer">kalku.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/html/kalkulator.html" target="_blank" rel="noopener noreferrer">kalkulator.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/html/sciences.html" target="_blank" rel="noopener noreferrer">sciences.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/html/sciences2.html" target="_blank" rel="noopener noreferrer">sciences2.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/html/sciences3.html" target="_blank" rel="noopener noreferrer">sciences3.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/html/sciences4..html" target="_blank" rel="noopener noreferrer">sciences4.html</a></li>
+          <li><a href="https://williamyaps.github.io/wlmjavascript/html/sciences5.htm" target="_blank" rel="noopener noreferrer">sciences5.html</a></li>
+		  <li><a href="https://williamyaps.github.io/xioaming/html/scorpio.html" target="_blank" rel="noopener noreferrer">Analis horoskop scorpio</a></li>
+		  <li><a href="https://williamyaps.github.io/xioaming/html/obatfatku.html" target="_blank" rel="noopener noreferrer">Obat Fatku</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 3. SITES HUB -->
+    <div class="hub-card">
+      <div class="card-header"><span><i class="fas fa-globe"></i> Sites Hub</span></div>
+      <div class="card-content">
+        <ul class="link-list">
+          <li><a href="https://williamyaps.github.io/xioaming/sites/anjingvsharimau.html" target="_blank" rel="noopener noreferrer">anjingvsharimau.html</a></li>
+          <li><a href="https://williamyaps.github.io/xioaming/sites/dnslevel.html" target="_blank" rel="noopener noreferrer">dnslevel.html</a></li>
+          <li><a href="https://williamyaps.github.io/xioaming/sites/dnslevelv2.html" target="_blank" rel="noopener noreferrer">dnslevelv2.html</a></li>
+          <li><a href="https://williamyaps.github.io/xioaming/sites/face.html" target="_blank" rel="noopener noreferrer">face.html</a></li>
+          <li><a href="https://williamyaps.github.io/xioaming/sites/face2.html" target="_blank" rel="noopener noreferrer">face2.html</a></li>
+          <li><a href="https://williamyaps.github.io/xioaming/sites/face3.html" target="_blank" rel="noopener noreferrer">face3.html</a></li>
+          <li><a href="https://williamyaps.github.io/xioaming/sites/face_refine_cpu.html" target="_blank" rel="noopener noreferrer">face_refine_cpu.html</a></li>
+          <li><a href="https://williamyaps.github.io/xioaming/sites/gpthpcompare.html" target="_blank" rel="noopener noreferrer">gpthpcompare.html</a></li>
+          <li><a href="https://williamyaps.github.io/xioaming/sites/hpcompare.html" target="_blank" rel="noopener noreferrer">hpcompare.html</a></li>
+          <li><a href="https://williamyaps.github.io/xioaming/sites/hpcomparison.html" target="_blank" rel="noopener noreferrer">hpcomparison.html</a></li>
+          <li><a href="https://williamyaps.github.io/xioaming/sites/kompor.html" target="_blank" rel="noopener noreferrer">kompor.html</a></li>
+          <li><a href="https://williamyaps.github.io/xioaming/sites/medansur.html" target="_blank" rel="noopener noreferrer">Medan Singapore.html</a></li>
+          <li><a href="https://williamyaps.github.io/xioaming/sites/ringkasancurl.html" target="_blank" rel="noopener noreferrer">ringkasancurl.html</a></li>
+          <li><a href="https://williamyaps.github.io/xioaming/sites/sinsur.html" target="_blank" rel="noopener noreferrer">Singapore Surabaya.html</a></li>
+		  <li><a href="https://williamyaps.github.io/xioaming/sites/sinsur2.html" target="_blank" rel="noopener noreferrer">Singapore Surabaya2.html</a></li>
+          <li><a href="https://williamyaps.github.io/xioaming/sites/tekniscurl.html" target="_blank" rel="noopener noreferrer">tekniscurl.html</a></li>
+          <li><a href="https://williamyaps.github.io/xioaming/sites/thankscopilot.html" target="_blank" rel="noopener noreferrer">thankscopilot.html</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 4. ANALYSIS -->
+    <div class="hub-card">
+      <div class="card-header"><span><i class="fas fa-chart-bar"></i> Analysis</span></div>
+      <div class="card-content">
+        <ul class="link-list">
+          <li><a href="https://williamyaps.github.io/xioaming/html/analis19771994.html" target="_blank" rel="noopener noreferrer">analis19771994.html</a></li>
+          <li><a href="https://williamyaps.github.io/xioaming/html/analis19941999.html" target="_blank" rel="noopener noreferrer">analis19941999.html</a></li>
+          <li><a href="https://williamyaps.github.io/xioaming/html/analis199419992024.html" target="_blank" rel="noopener noreferrer">analis199419992024.html</a></li>
+          <li><a href="https://williamyaps.github.io/xioaming/html/antinyeri.html" target="_blank" rel="noopener noreferrer">antinyeri.html</a></li>
+          <li><a href="https://williamyaps.github.io/xioaming/html/emas101004.html" target="_blank" rel="noopener noreferrer">emas101004.html</a></li>
+          <li><a href="https://williamyaps.github.io/xioaming/html/gout.html" target="_blank" rel="noopener noreferrer">gout.html</a></li>
+          <li><a href="https://williamyaps.github.io/xioaming/html/gouttextasli.html" target="_blank" rel="noopener noreferrer">gouttextasli.html</a></li>
+          <li><a href="https://williamyaps.github.io/xioaming/html/kurscompare11Mar10April.html" target="_blank" rel="noopener noreferrer">kurscompare.html</a></li>
+          <li><a href="https://williamyaps.github.io/xioaming/html/mitokondria.html" target="_blank" rel="noopener noreferrer">mitokondria.html</a></li>
+          <li><a href="https://williamyaps.github.io/xioaming/html/mitokrondria-story.html" target="_blank" rel="noopener noreferrer">mitokondria story.html</a></li>
+          <li><a href="https://williamyaps.github.io/xioaming/html/mitrokondria-adv.html" target="_blank" rel="noopener noreferrer">mitokondria advance.html</a></li>
+          <li><a href="https://williamyaps.github.io/xioaming/html/nongout.html" target="_blank" rel="noopener noreferrer">nongout.html</a></li>
+          <li><a href="https://williamyaps.github.io/xioaming/html/scorpio.html" target="_blank" rel="noopener noreferrer">scorpio.html</a></li>
+          <li><a href="https://williamyaps.github.io/xioaming/html/visualscorpio.html" target="_blank" rel="noopener noreferrer">visualscorpio.html</a></li>
+          <li><a href="https://williamyaps.github.io/xioaming/html/tcm.html" target="_blank" rel="noopener noreferrer">tcm.html</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 5. TOOLS -->
+    <div class="hub-card">
+      <div class="card-header"><span><i class="fas fa-tools"></i> Tools</span></div>
+      <div class="card-content">
+        <ul class="link-list">
+          <li><a href="https://wlmyaps.github.io/kurs/" target="_blank" rel="noopener noreferrer"><i class="fas fa-table"></i> Tabel Kurs Terkini</a></li>
+          <li><a href="https://wlmyaps.github.io/kurs/graph.html" target="_blank" rel="noopener noreferrer"><i class="fas fa-chart-area"></i> Grafik Pergerakan Kurs</a></li>
+          <li><a href="https://wlmyaps.github.io/kurs/buatgrafikcompare.html" target="_blank" rel="noopener noreferrer"><i class="fas fa-upload"></i> Upload CSV untuk buat grafik</a></li>
+          <li><a href="https://wlmyaps.github.io/kurs/buatgrafikcompare.html" target="_blank" rel="noopener noreferrer"><i class="fas fa-chart-line"></i> Analis Kurs (Upload CSV)</a></li>
+          <li><a href="https://wlmyaps.github.io/kurs/grafikcoompare.html" target="_blank" rel="noopener noreferrer"><i class="fas fa-exchange-alt"></i> Compare Kurs (Upload CSV)</a></li>
+          <li><a href="https://wlmyaps.github.io/kurs/menu2.html" target="_blank" rel="noopener noreferrer"><i class="fas fa-radio"></i> Menu Kurs tanpa Radio</a></li>
+          <li><a href="https://wlmyaps.github.io/adblock/" target="_blank" rel="noopener noreferrer">Test Adblock</a></li>
+          <li><a href="https://wlmyaps.github.io/proxy/" target="_blank" rel="noopener noreferrer">Free web proxy</a></li>
+          <li><a href="https://williamyaps.github.io/tv/" target="_blank" rel="noopener noreferrer">Free television</a></li>
+		  <li><a href="https://williamyaps.github.io/piano/pianowlm.html" target="_blank" rel="noopener noreferrer">Free piano</a></li>
+		  <li><a href="https://williamyaps.github.io/wlmjavascript/awan/quota.html" target="_blank" rel="noopener noreferrer">Free Kalkulator menghitung quota</a></li>		  
+		  <li><a href="https://wlmyaps.github.io/player/" target="_blank" rel="noopener noreferrer">Super Media Player</a></li>
+		  <li>
+			  <button onclick="downloadPlayer()" style="padding: 15px 25px; background: #24292e; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">
+				<i class="fas fa-download"></i> Download Player (Untuk Dibuka via lokal/HP untuk cegah CORS dan CSP) </button>
+			</li>
+			
+		  <li>
+		  <button onclick="downloadFile('https://archive.org/download/playermini45/playermini50-fixed.html', 'playermini50.html', 'Player versi 50 (fixed network buffer) berhasil diunduh!')" 
+				  style="padding: 15px 25px; background: #24292e; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">
+			<i class="fas fa-download"></i> Download Player versi 50 (fixed network buffering)
+		  </button>
+		  </li>	
+          <li><a href="https://wlmyaps.github.io/pdf/equalizer.html" target="_blank" rel="noopener noreferrer">Private Web Audio Editor</a></li>
+			<li><a href="https://wlmyaps.github.io/kurs/panduan_portofolio_edyanto.html" target="_blank" rel="noopener noreferrer"><i class="fas fa-book-open-reader"></i> Panduan Portfolio Kalkulator</a></li>
+			<li><a href="https://wlmyaps.github.io/kurs/portofolio.html" target="_blank" rel="noopener noreferrer"><i class="fas fa-balance-scale"></i> Portfolio Analyzer</a></li>
+			<li><a href="https://wlmyaps.github.io/kurs/portofolio2.html" target="_blank" rel="noopener noreferrer"><i class="fas fa-calculator"></i> Portfolio Analyzer  versi 2</a></li>		  
+        </ul>
+      </div>
+    </div>
+	
+    <!-- 6. My Bookmarks -->
+    <div class="hub-card">
+      <div class="card-header"><span><i class="fas fa-bookmark"></i> My Bookmarks</span></div>
+      <div class="card-content">
+        <ul class="link-list">
+		  <li><a href="https://williamyaps.blogspot.com/p/sitemap.html" target="_blank" rel="noopener noreferrer">Peta blog saya</a></li>
+		  <li><a href="https://wlmyaps.github.io/kurs/fas.html" target="_blank" rel="noopener noreferrer">Fonts awesome icon display</a></li>
+		  <li><a href="https://wlmyaps.github.io/kurs/fas.html" target="_blank" rel="noopener noreferrer">Fonts awesome icon display2</a></li>
+          <li><a href="https://fontawesome.com/v6/search" target="_blank" rel="noopener noreferrer">Fonts awesome</a></li>          
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    /* ===== TOGGLE: DOUBLE-CLICK DI DESKTOP, SINGLE-CLICK DI HP ===== */
+    const cardHeaders = document.querySelectorAll('.hub-card .card-header');
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+    cardHeaders.forEach(header => {
+      if (isTouchDevice) {
+        header.addEventListener('click', (e) => {
+          const card = header.parentElement;
+          card.classList.toggle('open');
+          playBeep();
+        });
+      } else {
+        let clickTimer = null;
+        header.addEventListener('click', (e) => {
+          if (clickTimer === null) {
+            clickTimer = setTimeout(() => {
+              clickTimer = null;
+            }, 300);
+          } else {
+            clearTimeout(clickTimer);
+            clickTimer = null;
+            const card = header.parentElement;
+            card.classList.toggle('open');
+            playBeep();
+          }
+        });
+      }
+    });
+
+    /* ===== SHORTCUT KEYBOARD 1-5 ===== */
+    document.addEventListener('keydown', (e) => {
+      if (e.key >= '1' && e.key <= '5') {
+        const cards = document.querySelectorAll('.hub-card');
+        const card = cards[e.key - 1];
+        if (card) {
+          card.classList.toggle('open');
+          playBeep();
+        }
+      }
+    });
+
+    /* ===== FUNGSI HELPER ESCAPE REGEXP ===== */
+    function escapeRegExp(string) {
+      return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    /* ===== SEARCH FUNCTIONALITY (REVISI) ===== */
+    const searchInput = document.getElementById('searchInput');
+    const clearBtn = document.getElementById('clearSearchBtn');
+    const notFoundMsg = document.getElementById('notFoundMsg');
+    const allCards = document.querySelectorAll('.hub-card');
+
+    function highlightAndFilter(keyword) {
+      const term = keyword.trim().toLowerCase();
+      let anyVisible = false;
+
+      allCards.forEach(card => {
+        const headerSpan = card.querySelector('.card-header span');
+        const headerText = headerSpan ? headerSpan.innerText.toLowerCase() : '';
+        const links = card.querySelectorAll('.link-list li');
+        let cardMatch = headerText.includes(term);
+        let anyLinkMatch = false;
+
+        links.forEach(li => {
+          const a = li.querySelector('a');
+          if (!a) return;
+          const originalHtml = a.getAttribute('data-original-html') || a.innerHTML;
+          if (!a.getAttribute('data-original-html')) {
+            a.setAttribute('data-original-html', originalHtml);
+          }
+          a.innerHTML = originalHtml;
+
+          if (term === '') {
+            li.classList.remove('hidden-link');
+            return;
+          }
+
+          const linkText = a.innerText.toLowerCase();
+          const href = a.getAttribute('href') ? a.getAttribute('href').toLowerCase() : '';
+          const match = linkText.includes(term) || href.includes(term);
+
+          if (match) {
+            li.classList.remove('hidden-link');
+            const escaped = escapeRegExp(term);
+            a.innerHTML = originalHtml.replace(
+              new RegExp(escaped, 'gi'),
+              `<mark>$&</mark>`
+            );
+            anyLinkMatch = true;
+          } else {
+            li.classList.add('hidden-link');
+          }
+        });
+
+        if (anyLinkMatch) cardMatch = true;
+
+        if (cardMatch && term !== '') {
+          card.classList.remove('hidden-by-search');
+          if (!card.classList.contains('open')) {
+            card.classList.add('open');
+          }
+          anyVisible = true;
+        } else if (term === '') {
+          card.classList.remove('hidden-by-search');
+        } else {
+          card.classList.add('hidden-by-search');
+          card.classList.remove('open');
+        }
+      });
+
+      if (term !== '' && !anyVisible) {
+        notFoundMsg.style.display = 'block';
+      } else {
+        notFoundMsg.style.display = 'none';
+      }
+
+      clearBtn.style.display = term !== '' ? 'block' : 'none';
+    }
+
+    searchInput.addEventListener('input', (e) => {
+      highlightAndFilter(e.target.value);
+    });
+
+    clearBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      highlightAndFilter('');
+      searchInput.focus();
+    });
+
+    clearBtn.style.display = 'none';
+
+    /* ===== DIGITAL CLOCK ===== */
+    function updateClock() {
+      const now = new Date();
+      const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+      const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+      const dayName = days[now.getDay()];
+      const date = now.getDate();
+      const month = months[now.getMonth()];
+      const year = now.getFullYear();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById('liveClock').innerHTML = 
+        `${dayName}, ${date} ${month} ${year} · <span class="time">${hours}:${minutes}:${seconds}</span>`;
+      document.getElementById('marqueeText').innerHTML = 
+        `3D CENTRAL HUB • ${dayName}, ${date} ${month} ${year} • William Yaps Collection • Jelajahi Semua Tools & Analisis`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    /* ===== BEEP AUDIO ===== */
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    const audioCtx = new AudioContext();
+    function playBeep() {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.1);
+      gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.1);
+    }
+  </script>
+  
+  <script>
+// Fungsi umum untuk mendownload file apapun
+// Fungsi download dengan fallback jika fetch gagal (CORS)
+function downloadFile(url, filename, successMessage) {
+    fetch(url, { mode: 'cors' })
+        .then(response => {
+            if (!response.ok) throw new Error('Server error');
+            return response.blob();
+        })
+        .then(blob => {
+            const a = document.createElement('a');
+            a.href = window.URL.createObjectURL(blob);
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(a.href);
+            if (successMessage) alert(successMessage);
+        })
+        .catch(() => {
+            alert('Tidak bisa mengunduh otomatis karena batasan CORS.\\nMembuka file di tab baru...');
+            window.open(url, '_blank');
+        });
+}
+
+// Fungsi downloadPlayer tetap bisa pakai fetch karena GitHub mengizinkan CORS
+function downloadPlayer() {
+    downloadFile(
+        'https://raw.githubusercontent.com/wlmyaps/player/main/player.html',
+        'player.html',
+        'Mantap Bestie! player.html sudah meluncur ke folder Download-mu.'
+    );
+}
+</script>
+
+  <script>
+    /* ===== VANILLA TILT 3D PADA KARTU ===== */
+    if (typeof VanillaTilt !== 'undefined') {
+      VanillaTilt.init(document.querySelectorAll(".hub-card"), {
+        max: 18,
+        speed: 600,
+        glare: true,
+        "max-glare": 0.25,
+        scale: 1.03,
+        perspective: 1200,
+        transition: true,
+        gyroscope: true
+      });
+    }
+  </script>
+  <script>
+    /* ===== PARALLAX JAM 3D ===== */
+    document.addEventListener('mousemove', (e) => {
+      const clock = document.getElementById('liveClock');
+      if (!clock) return;
+      const x = (window.innerWidth / 2 - e.pageX) / 40;
+      const y = (window.innerHeight / 2 - e.pageY) / 40;
+      clock.style.transform = `perspective(1000px) rotateY(${x}deg) rotateX(${-y}deg) translateZ(20px)`;
+    });
+  </script>
+</body>
+</html>
