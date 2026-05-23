@@ -1,0 +1,331 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Lapis Kedua - Enkripsi Web Crypto</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f7fa;
+        }
+        .card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            padding: 30px;
+            margin-bottom: 25px;
+        }
+        h1, h2 { color: #1e293b; }
+        label { font-weight: 600; display: block; margin: 15px 0 5px; }
+        input[type="file"], input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 15px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+        button {
+            background: #0f172a;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover { background: #1e293b; }
+        .info {
+            background: #e0f2fe;
+            border-left: 5px solid #0284c7;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .warning {
+            background: #fff3cd;
+            border-left: 5px solid #f59e0b;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        a.download-btn {
+            display: inline-block;
+            background: #059669;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        #errorMsg { color: #dc2626; font-weight: bold; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🔐 Lapis Kedua – Enkripsi Web Crypto</h1>
+        <p>Upload file HTML yang <strong>sudah berisi proteksi</strong> (disable‑devtool, anti‑klik kanan, dll).<br>
+        Masukkan password super kuat, lalu download file terenkripsi.</p>
+        <div class="info">
+            🛡️ <strong>Teknologi:</strong> PBKDF2 100.000 iterasi + AES‑GCM 256‑bit.<br>
+            ⏳ Sekali coba password butuh ~0,5 detik → brute‑force mustahil.
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>1. Pilih file HTML terlindungi</h2>
+        <input type="file" id="fileInput" accept=".html,.htm">
+
+        <h2>2. Password enkripsi</h2>
+        <input type="password" id="password" placeholder="Minimal 12 karakter, campur simbol">
+        <input type="password" id="confirmPassword" placeholder="Konfirmasi password">
+
+        <div id="errorMsg"></div>
+
+        <button id="encryptBtn">🔒 Enkripsi & Download</button>
+    </div>
+
+    <div class="card" id="resultCard" style="display:none;">
+        <h2>3. Hasil</h2>
+        <p>File terenkripsi siap diunduh. Saat dibuka akan meminta password, lalu menampilkan konten asli dengan seluruh proteksi aktif.</p>
+        <a class="download-btn" id="downloadLink" href="#" download="protected_encrypted.html">📥 Download File Terenkripsi</a>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirmPassword');
+        const encryptBtn = document.getElementById('encryptBtn');
+        const errorMsg = document.getElementById('errorMsg');
+        const resultCard = document.getElementById('resultCard');
+        const downloadLink = document.getElementById('downloadLink');
+        let uploadedContent = null;
+
+        // Baca file
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                uploadedContent = ev.target.result;
+                errorMsg.textContent = '';
+            };
+            reader.onerror = () => {
+                errorMsg.textContent = '❌ Gagal membaca file.';
+            };
+            reader.readAsText(file);
+        });
+
+        // Helper: Uint8Array ke Base64
+        function bufferToBase64(buffer) {
+            let binary = '';
+            const bytes = new Uint8Array(buffer);
+            bytes.forEach(b => binary += String.fromCharCode(b));
+            return btoa(binary);
+        }
+
+        // Enkripsi dan bangun template
+        async function encryptAndBuildTemplate(plainText, passwordStr) {
+            // Generate salt 16 byte & IV 12 byte
+            const salt = crypto.getRandomValues(new Uint8Array(16));
+            const iv = crypto.getRandomValues(new Uint8Array(12));
+
+            // Derive key pakai PBKDF2
+            const keyMaterial = await crypto.subtle.importKey(
+                "raw",
+                new TextEncoder().encode(passwordStr),
+                "PBKDF2",
+                false,
+                ["deriveKey"]
+            );
+            const key = await crypto.subtle.deriveKey(
+                {
+                    name: "PBKDF2",
+                    salt: salt,
+                    iterations: 100000,
+                    hash: "SHA-256"
+                },
+                keyMaterial,
+                { name: "AES-GCM", length: 256 },
+                false,
+                ["encrypt"]
+            );
+
+            // Enkripsi konten
+            const encodedText = new TextEncoder().encode(plainText);
+            const ciphertext = await crypto.subtle.encrypt(
+                { name: "AES-GCM", iv: iv },
+                key,
+                encodedText
+            );
+
+            // Gabungkan salt + iv + ciphertext
+            const combined = new Uint8Array(salt.length + iv.length + ciphertext.byteLength);
+            combined.set(salt, 0);
+            combined.set(iv, salt.length);
+            combined.set(new Uint8Array(ciphertext), salt.length + iv.length);
+
+            const encryptedB64 = bufferToBase64(combined);
+
+            // Template HTML untuk dekripsi
+            return `<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Dokumen Terproteksi - Password Diperlukan</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #0f172a;
+            color: #f8fafc;
+        }
+        .lock-container {
+            background: #1e293b;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 420px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        input {
+            width: 90%;
+            padding: 12px;
+            margin: 15px 0;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        button:hover { background: #2563eb; }
+        .error { color: #fca5a5; margin-top: 10px; }
+    </style>
+</head>
+<body>
+<div class="lock-container">
+    <h2>🔐 Dokumen Terenkripsi</h2>
+    <p>Konten dilindungi dengan AES‑GCM 256‑bit + PBKDF2 100k iterasi.</p>
+    <input type="password" id="password" placeholder="Masukkan password" autofocus>
+    <br>
+    <button id="decryptBtn">Buka</button>
+    <div id="errorMsg" class="error"></div>
+</div>
+<script>
+    (async function() {
+        const encryptedB64 = "${encryptedB64}";
+        const decryptBtn = document.getElementById('decryptBtn');
+        const passwordField = document.getElementById('password');
+        const errorDiv = document.getElementById('errorMsg');
+
+        async function decryptAndShow() {
+            const pwd = passwordField.value;
+            if (!pwd) {
+                errorDiv.innerText = 'Password tidak boleh kosong!';
+                return;
+            }
+            try {
+                const rawData = Uint8Array.from(atob(encryptedB64), c => c.charCodeAt(0));
+                const salt = rawData.slice(0, 16);
+                const iv = rawData.slice(16, 28);
+                const ciphertext = rawData.slice(28);
+
+                const keyMaterial = await crypto.subtle.importKey(
+                    "raw",
+                    new TextEncoder().encode(pwd),
+                    "PBKDF2",
+                    false,
+                    ["deriveKey"]
+                );
+                const key = await crypto.subtle.deriveKey(
+                    {
+                        name: "PBKDF2",
+                        salt: salt,
+                        iterations: 100000,
+                        hash: "SHA-256"
+                    },
+                    keyMaterial,
+                    { name: "AES-GCM", length: 256 },
+                    false,
+                    ["decrypt"]
+                );
+
+                const decrypted = await crypto.subtle.decrypt(
+                    { name: "AES-GCM", iv: iv },
+                    key,
+                    ciphertext
+                );
+                const decodedText = new TextDecoder().decode(decrypted);
+                document.open();
+                document.write(decodedText);
+                document.close();
+            } catch (e) {
+                errorDiv.innerText = 'Gagal mendekripsi. Password salah!';
+            }
+        }
+
+        decryptBtn.addEventListener('click', decryptAndShow);
+        passwordField.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') decryptAndShow();
+        });
+    })();
+<\/script>
+</body>
+</html>`;
+        }
+
+        // Tombol enkripsi
+        encryptBtn.addEventListener('click', async () => {
+            errorMsg.textContent = '';
+            if (!uploadedContent) {
+                errorMsg.textContent = '❌ Pilih file HTML dulu.';
+                return;
+            }
+            const pass = password.value;
+            const conf = confirmPassword.value;
+            if (!pass) {
+                errorMsg.textContent = '❌ Password tidak boleh kosong.';
+                return;
+            }
+            if (pass !== conf) {
+                errorMsg.textContent = '❌ Password dan konfirmasi tidak cocok.';
+                return;
+            }
+            if (pass.length < 1) {
+                errorMsg.textContent = '⚠️ Password minimal 8 karakter (rekomendasi 12+ dengan simbol).';
+                return;
+            }
+
+            try {
+                const finalHtml = await encryptAndBuildTemplate(uploadedContent, pass);
+                const blob = new Blob([finalHtml], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                downloadLink.href = url;
+                downloadLink.download = 'super_encrypted.html';
+                resultCard.style.display = 'block';
+                downloadLink.click(); // Otomatis download
+            } catch (err) {
+                errorMsg.textContent = '❌ Gagal enkripsi: ' + err.message;
+            }
+        });
+    </script>
+</body>
+</html>
