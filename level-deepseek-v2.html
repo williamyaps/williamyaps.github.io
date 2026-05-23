@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>💎 Ultimate Vault Builder (Offline Ready)</title>
+    <style>
+        * { box-sizing: border-box; font-family: 'Segoe UI', system-ui; }
+        body { background: #0a0c12; color: #eee; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .card { background: #161b22; border-radius: 28px; padding: 32px; max-width: 600px; width: 100%; border: 1px solid #30363d; }
+        h1 { color: #facc15; margin-top: 0; }
+        label { display: block; margin: 18px 0 6px; font-weight: 600; }
+        input, input[type="file"] { width: 100%; padding: 12px; background: #0d1117; border: 1px solid #30363d; border-radius: 14px; color: #fff; }
+        button { background: #facc15; color: #000; border: none; padding: 14px; border-radius: 40px; font-weight: bold; width: 100%; margin-top: 25px; cursor: pointer; }
+        .log { margin-top: 20px; padding: 12px; border-radius: 14px; background: #0d1117; border-left: 4px solid #facc15; display: none; }
+        .error { border-left-color: #f85149; }
+        .success { border-left-color: #2ea043; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1>🛡️ Ultimate Vault (Embedded Wasm)</h1>
+    <p>Argon2id + AES-GCM • Anti-DevTools • Polymorphic Garbage • Full Offline Output</p>
+    <label>📄 File HTML target</label>
+    <input type="file" id="fileInput" accept=".html,.htm">
+    <label>🔑 Password (emoji / teks)</label>
+    <input type="password" id="password" placeholder="Contoh: 🥰">
+    <label>🔁 Konfirmasi</label>
+    <input type="password" id="confirmPass">
+    <button id="encryptBtn">🔒 Enkripsi & Cetak Benteng</button>
+    <div id="logArea" class="log"></div>
+</div>
+
+<script>
+    (function(){
+        const fileInput = document.getElementById('fileInput');
+        const passInput = document.getElementById('password');
+        const confInput = document.getElementById('confirmPass');
+        const btn = document.getElementById('encryptBtn');
+        const logDiv = document.getElementById('logArea');
+        let fileContent = null;
+        let argon2jsCode = ''; // akan diisi
+
+        function log(msg, type='info') {
+            logDiv.style.display = 'block';
+            logDiv.className = `log ${type}`;
+            logDiv.innerHTML = msg;
+        }
+
+        // Ambil library argon2-browser versi UMD + wasm (embed)
+        async function fetchArgon2Library() {
+            try {
+                log('📡 Mengunduh library Argon2...', 'info');
+                const jsUrl = 'https://cdn.jsdelivr.net/npm/argon2-browser@1.18.0/dist/argon2.min.js';
+                const wasmUrl = 'https://cdn.jsdelivr.net/npm/argon2-browser@1.18.0/dist/argon2.wasm';
+                const [jsRes, wasmRes] = await Promise.all([fetch(jsUrl), fetch(wasmUrl)]);
+                if (!jsRes.ok || !wasmRes.ok) throw new Error('Gagal fetch');
+                let jsCode = await jsRes.text();
+                const wasmBuffer = await wasmRes.arrayBuffer();
+                // Encode wasm ke Base64
+                let binary = '';
+                const bytes = new Uint8Array(wasmBuffer);
+                const chunkSize = 0x8000;
+                for (let i=0; i<bytes.length; i+=chunkSize) {
+                    binary += String.fromCharCode.apply(null, bytes.subarray(i, i+chunkSize));
+                }
+                const wasmBase64 = btoa(binary);
+                // Suntikkan wasmBase64 ke dalam jsCode (overwrite default url)
+                jsCode = jsCode + `\nwindow.__argon2WasmBase64 = "${wasmBase64}";\n`;
+                // Override fungsi fetch wasm
+                jsCode = jsCode.replace(/fetch\([^)]+\.wasm[^)]*\)/g, `fetch("data:application/wasm;base64,${wasmBase64}")`);
+                argon2jsCode = jsCode;
+                log('✅ Library siap (embedded wasm)', 'success');
+                return true;
+            } catch(e) {
+                log('❌ Gagal: ' + e.message, 'error');
+                return false;
+            }
+        }
+
+        // Polymorphic garbage generator
+        function makeGarbage(lines=600) {
+            let junk = '\n// POLY SHIELD\n';
+            const vars = ['_a','_b','_c','_d','_e'];
+            const ops = ['+','-','*','/','%','^','&','|'];
+            for(let i=0;i<lines;i++) {
+                let v = vars[Math.floor(Math.random()*vars.length)] + Math.floor(Math.random()*9999);
+                if(Math.random()<0.3) junk += `let ${v} = (${Math.floor(Math.random()*300)} ${ops[Math.floor(Math.random()*ops.length)]} ${Math.floor(Math.random()*100)});\n`;
+                else if(Math.random()<0.6) junk += `const _f${i}=()=>window.scrollY*${Math.random().toFixed(3)};\n`;
+                else junk += `if(Date.now()%${Math.floor(Math.random()*100)+1}>${Math.floor(Math.random()*50)}){let _x="${v}";}\n`;
+            }
+            return junk;
+        }
+
+        // Anti-devtools halus
+        const antiDevtools = `
+        (function(){
+            let detected=false;
+            setInterval(()=>{
+                const start=performance.now();
+                debugger;
+                const end=performance.now();
+                if(end-start>50 && !detected){
+                    detected=true;
+                    document.body.innerHTML='<div style="background:#000;color:red;text-align:center;padding:20vh;">🔒 DevTools Detected</div>';
+                    throw new Error('stop');
+                }
+            },400);
+            document.addEventListener('contextmenu',e=>e.preventDefault());
+            document.addEventListener('keydown',e=>{if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&(e.key==='I'||e.key==='J')))e.preventDefault();});
+        })();
+        `;
+
+        // Enkripsi menggunakan Argon2 (via eval library)
+        async function encryptContent(plain, password) {
+            // Evaluasi library argon2
+            eval(argon2jsCode);
+            if(!window.argon2) throw new Error('Argon2 tidak tersedia');
+            const salt = crypto.getRandomValues(new Uint8Array(16));
+            const iv = crypto.getRandomValues(new Uint8Array(12));
+            const res = await window.argon2.hash({
+                pass: password, salt: salt, time: 4, mem: 32768, hashLen: 32, parallelism: 2,
+                type: window.argon2.ArgonType.Argon2id
+            });
+            const key = await crypto.subtle.importKey('raw', res.hash, {name:'AES-GCM'}, false, ['encrypt']);
+            const encrypted = await crypto.subtle.encrypt({name:'AES-GCM', iv}, key, new TextEncoder().encode(plain));
+            const combined = new Uint8Array(16+12+encrypted.byteLength);
+            combined.set(salt,0); combined.set(iv,16); combined.set(new Uint8Array(encrypted),28);
+            let bin='';
+            for(let i=0;i<combined.length;i+=0x7fff){
+                bin+=String.fromCharCode.apply(null, combined.subarray(i,i+0x7fff));
+            }
+            return btoa(bin);
+        }
+
+        // Build final HTML output (offline, embedded library)
+        async function buildFinal(originalHtml, password, encryptedB64) {
+            const garbage = makeGarbage(520);
+            // Kita harus menyertakan library argon2 yang sudah di-embed (base64 wasm) di output
+            // Karena kita sudah punya argon2jsCode yang telah dimodifikasi, kita masukkan ke output
+            const embeddedLib = argon2jsCode; // ini sudah include wasm base64
+            return `<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <title>🔒 Dokumen Terproteksi</title>
+    <style>
+        *{box-sizing:border-box;}
+        body{background:#0b0f19;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;font-family:monospace;}
+        .box{background:#111827;border-radius:28px;padding:40px;width:90%;max-width:450px;text-align:center;}
+        input{width:100%;padding:14px;margin:15px 0;background:#1e293b;border:1px solid #475569;border-radius:40px;color:#fff;}
+        button{background:#facc15;color:#000;border:none;padding:12px;border-radius:40px;width:100%;font-weight:bold;cursor:pointer;}
+        .err{color:#f87171;margin-top:12px;}
+    </style>
+</head>
+<body>
+<div class="box">
+    <h2 style="color:#facc15;">🔐 Buka Dokumen</h2>
+    <input type="password" id="pwd" placeholder="Masukkan password" autofocus>
+    <button id="unlock">Buka</button>
+    <div id="err" class="err"></div>
+</div>
+<script>
+    ${embeddedLib}
+    ${garbage}
+    ${antiDevtools}
+    const encryptedB64 = "${encryptedB64}";
+    async function decryptAndShow(pass){
+        try{
+            const combined = Uint8Array.from(atob(encryptedB64), c=>c.charCodeAt(0));
+            const salt = combined.slice(0,16), iv = combined.slice(16,28), cipher = combined.slice(28);
+            const res = await argon2.hash({
+                pass: pass, salt: salt, time: 4, mem: 32768, hashLen: 32, parallelism: 2,
+                type: argon2.ArgonType.Argon2id
+            });
+            const key = await crypto.subtle.importKey('raw', res.hash, {name:'AES-GCM'}, false, ['decrypt']);
+            const plain = await crypto.subtle.decrypt({name:'AES-GCM', iv}, key, cipher);
+            const html = new TextDecoder().decode(plain);
+            document.open(); document.write(html); document.close();
+        }catch(e){
+            document.getElementById('err').innerText = '❌ Password salah atau file rusak.';
+        }
+    }
+    document.getElementById('unlock').onclick = () => {
+        const p = document.getElementById('pwd').value;
+        if(!p) return;
+        decryptAndShow(p);
+    };
+    document.getElementById('pwd').onkeypress = e => { if(e.key==='Enter') document.getElementById('unlock').click(); };
+<\/script>
+</body>
+</html>`;
+        }
+
+        // Event handler
+        fileInput.addEventListener('change', e => {
+            const f = e.target.files[0];
+            if(!f) return;
+            const rd = new FileReader();
+            rd.onload = ev => { fileContent = ev.target.result; log('File siap', 'success'); };
+            rd.readAsText(f);
+        });
+
+        btn.addEventListener('click', async () => {
+            if(!fileContent) return log('Pilih file HTML dulu', 'error');
+            const pwd = passInput.value;
+            if(!pwd || pwd !== confInput.value) return log('Password tidak cocok atau kosong', 'error');
+            if(!argon2jsCode) {
+                log('Sedang memuat library... tunggu', 'info');
+                const ok = await fetchArgon2Library();
+                if(!ok) return;
+            }
+            btn.innerText = '⚙️ Memproses...';
+            try {
+                const encryptedB64 = await encryptContent(fileContent, pwd);
+                const finalHtml = await buildFinal(fileContent, pwd, encryptedB64);
+                const blob = new Blob([finalHtml], {type: 'text/html'});
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'fortress_offline.html';
+                a.click();
+                log('✅ Sukses! File fortress_offline.html terunduh.', 'success');
+            } catch(err) {
+                log('❌ Error: ' + err.message, 'error');
+            } finally {
+                btn.innerText = '🔒 Enkripsi & Cetak Benteng';
+            }
+        });
+
+        // Preload library
+        fetchArgon2Library();
+    })();
+</script>
+</body>
+</html>
