@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini Vault - ChaCha20-Poly1305</title>
+    <style>
+        * { box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background: #090d16; color: #f1f5f9; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .vault-container { background: #111827; border: 1px solid #1f2937; border-radius: 16px; padding: 30px; width: 100%; max-width: 550px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h1 { color: #38bdf8; margin: 0 0 10px; font-size: 22px; text-align: center; }
+        p.desc { color: #9ca3af; text-align: center; font-size: 13px; margin-bottom: 25px; }
+        label { display: block; margin: 15px 0 5px; font-size: 14px; font-weight: 600; color: #cbd5e1; }
+        input[type="file"], input[type="password"] { width: 100%; padding: 12px; background: #030712; border: 1px solid #374151; border-radius: 8px; color: #fff; font-size: 14px; margin-bottom: 5px; }
+        input:focus { border-color: #38bdf8; outline: none; }
+        .btn { width: 100%; padding: 14px; background: #0284c7; border: none; border-radius: 8px; color: white; font-weight: bold; font-size: 15px; cursor: pointer; margin-top: 20px; transition: 0.2s; }
+        .btn:hover { background: #0369a1; }
+        .btn:disabled { background: #4b5563; cursor: not-allowed; }
+        #log { margin-top: 15px; padding: 10px; border-radius: 6px; font-size: 12px; font-family: monospace; display: none; }
+        .info { background: #1e3a5f; color: #93c5fd; }
+        .success { background: #064e3b; color: #6ee7b7; }
+        .error { background: #7f1d1d; color: #fca5a5; }
+    </style>
+    <script type="module">
+        import { chacha20poly1305 } from 'https://esm.sh/@noble/ciphers@0.6.0/chacha';
+        import { scrypt } from 'https://esm.sh/@noble/hashes@1.4.0/scrypt';
+        window.cryptoEngine = { chacha20poly1305, scrypt };
+    </script>
+</head>
+<body>
+
+<div class="vault-container">
+    <h1>♊ Gemini ChaCha20-Poly1305 Vault</h1>
+    <p class="desc">Mengunci berkas dengan algoritma Stream Cipher berkecepatan tinggi standar Eropa.</p>
+
+    <label>1. Pilih File HTML Mentah (40k Link TV):</label>
+    <input type="file" id="sourceFile" accept=".html">
+
+    <label>2. Masukkan Password Lapis Ini (64 Karakter):</label>
+    <input type="password" id="password" placeholder="Masukkan password unik Anda...">
+
+    <label>3. Konfirmasi Password:</label>
+    <input type="password" id="confirmPassword" placeholder="Ulangi password...">
+
+    <button class="btn" id="execBtn" disabled>🚀 Enkripsi & Download Balik</button>
+    <div id="log"></div>
+</div>
+
+<script>
+    let fileData = null;
+    let originalName = "database";
+
+    const fileInput = document.getElementById('sourceFile');
+    const passInput = document.getElementById('password');
+    const confInput = document.getElementById('confirmPassword');
+    const btn = document.getElementById('execBtn');
+    const logBox = document.getElementById('log');
+
+    function showLog(msg, type) {
+        logBox.className = type;
+        logBox.textContent = msg;
+        logBox.style.display = 'block';
+    }
+
+    fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        originalName = file.name.replace(/\.html$/i, '');
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+            fileData = ev.target.result;
+            showLog(`📁 File terbaca: ${file.name} (${(file.size/1024).toFixed(1)} KB)`, 'info');
+            checkInputs();
+        };
+        reader.readAsText(file);
+    });
+
+    [passInput, confInput].forEach(el => el.addEventListener('input', checkInputs));
+
+    function checkInputs() {
+        btn.disabled = !(fileData && passInput.value && passInput.value === confInput.value);
+    }
+
+    // Fungsi Pengubah Teks ke Array Biner
+    const enc = new TextEncoder();
+
+    btn.addEventListener('click', async () => {
+        btn.disabled = true;
+        btn.textContent = '⚡ Memproses ChaCha20...';
+        showLog('Menjalankan Kriptografi...', 'info');
+
+        try {
+            if (!window.cryptoEngine) throw new Error('Mesin Kriptografi belum siap. Periksa koneksi internet saat memuat halaman pengunci.');
+
+            const { chacha20poly1305, scrypt } = window.cryptoEngine;
+            const passwordStr = passInput.value;
+
+            // 1. Membuat Salt & Nonce acak secara aman (Keamanan tingkat tinggi)
+            const salt = crypto.getRandomValues(new Uint8Array(16));
+            const nonce = crypto.getRandomValues(new Uint8Array(12));
+
+            // 2. Peregangan Kunci (Key Derivation) menggunakan Scrypt agar kebal brute-force
+            showLog('Menghitung Kunci Pengaman (Scrypt)...', 'info');
+            const key = scrypt(enc.encode(passwordStr), salt, { N: 16384, r: 8, p: 1, dkLen: 32 });
+
+            // 3. Eksekusi Enkripsi ChaCha20-Poly1305
+            showLog('Mengunci data biner link TV...', 'info');
+            const plainBytes = enc.encode(fileData);
+            const cipherBytes = chacha20poly1305(key, nonce).encrypt(plainBytes);
+
+            // 4. Penggabungan Paket untuk Output
+            const saltHex = Array.from(salt).map(b => b.toString(16).padStart(2, '0')).join('');
+            const nonceHex = Array.from(nonce).map(b => b.toString(16).padStart(2, '0')).join('');
+            const cipherBase64 = btoa(String.fromCharCode(...cipherBytes));
+
+            // 5. Cetak Template Otomatis untuk Lapis Ini
+            const finalHtml = buildDecoderTemplate(cipherBase64, saltHex, nonceHex, originalName);
+
+            // 6. Download balik sesuai format pesanan Anda!
+            const blob = new Blob([finalHtml], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${originalName}_chacha20Poly1305.html`;
+            a.click();
+            URL.revokeObjectURL(url);
+
+            showLog('✅ Sukses! File ChaCha20-Poly1305 berhasil diunduh.', 'success');
+        } catch (err) {
+            showLog('❌ Gagal: ' + err.message, 'error');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = '🚀 Enkripsi & Download Balik';
+        }
+    });
+
+    // Template Halaman Hasil yang akan dimasukkan ke GitHub Anda
+    function buildDecoderTemplate(cipher, salt, nonce, filename) {
+        return `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Terproteksi - ChaCha20-Poly1305</title>
+    <style>
+        body { background: #0b0f19; color: #e2e8f0; font-family: system-ui, sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
+        .box { background: #1e293b; padding: 30px; border-radius: 12px; width: 100%; max-width: 450px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+        input { width: 100%; padding: 12px; margin: 15px 0; background: #0f172a; border: 1px solid #475569; border-radius: 6px; color: white; text-align: center; }
+        button { background: #0284c7; color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; }
+        button:hover { background: #0369a1; }
+        #err { color: #f87171; font-size: 13px; margin-top: 10px; font-family: monospace; }
+    </style>
+    <script type="module">
+        import { chacha20poly1305 } from 'https://esm.sh/@noble/ciphers@0.6.0/chacha';
+        import { scrypt } from 'https://esm.sh/@noble/hashes@1.4.0/scrypt';
+        window.decryptEngine = { chacha20poly1305, scrypt };
+    </script>
+</head>
+<body>
+<div class="box">
+    <h3>🔒 Gerbang ChaCha20-Poly1305</h3>
+    <p style="font-size:12px; color:#94a3b8">File: ${filename}</p>
+    <input type="password" id="p" placeholder="Masukkan Password 64 Karakter...">
+    <button id="b">Buka Akses</button>
+    <div id="err"></div>
+</div>
+<script>
+    const cipherB64 = "${cipher}";
+    const saltHex = "${salt}";
+    const nonceHex = "${nonce}";
+
+    document.getElementById('b').addEventListener('click', async () => {
+        const btn = document.getElementById('b');
+        const err = document.getElementById('err');
+        err.textContent = "";
+        btn.disabled = true;
+        btn.textContent = "Membuka Sandi...";
+
+        try {
+            const pass = document.getElementById('p').value;
+            const { chacha20poly1305, scrypt } = window.decryptEngine;
+
+            const salt = new Uint8Array(saltHex.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+            const nonce = new Uint8Array(nonceHex.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+            
+            const cipherBytes = Uint8Array.from(atob(cipherB64), c => c.charCodeAt(0));
+            const passBytes = new TextEncoder().encode(pass);
+
+            // Hitung balik kunci pengaman
+            const key = scrypt(passBytes, salt, { N: 16384, r: 8, p: 1, dkLen: 32 });
+            
+            // Dekripsi data asli
+            const plainBytes = chacha20poly1305(key, nonce).decrypt(cipherBytes);
+            const decodedHtml = new TextDecoder().decode(plainBytes);
+
+            // Buka data murni langsung di browser tanpa merusak memori
+            document.open();
+            document.write(decodedHtml);
+            document.close();
+        } catch (e) {
+            err.textContent = "❌ Password Salah atau Paket Data Rusak!";
+            btn.disabled = false;
+            btn.textContent = "Buka Akses";
+        }
+    });
+</script>
+</body>
+</html>`;
+    }
+</script>
+</body>
+</html>
